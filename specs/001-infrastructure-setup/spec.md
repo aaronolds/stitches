@@ -48,7 +48,7 @@ As a DevOps engineer or developer, I need Azure infrastructure provisioned autom
 
 **Why this priority**: While critical for deployment, this can be set up after local development environments are working. This enables the team to deploy completed features to cloud environments and share progress with stakeholders. Without this, the application remains local-only.
 
-**Independent Test**: Run the IaC provisioning command (e.g., `az deployment group create` or `terraform apply`), verify all Azure resources are created in the Azure portal (App Service, SQL Database, Blob Storage, Key Vault, Application Insights, CDN), then trigger the CI/CD pipeline and verify it successfully deploys the application to staging with the health check endpoint returning `200 OK`.
+**Independent Test**: Run the IaC provisioning command (e.g., `az deployment group create --resource-group stitches-staging --template-file infrastructure/bicep/main.bicep`), verify all Azure resources are created in the Azure portal (App Service, SQL Database, Blob Storage, Key Vault, Application Insights, CDN), then trigger the CI/CD pipeline and verify it successfully deploys the application to staging with the health check endpoint returning `200 OK`.
 
 **Acceptance Scenarios**:
 
@@ -57,7 +57,7 @@ As a DevOps engineer or developer, I need Azure infrastructure provisioned autom
 3. **Given** the application is deployed to staging, **When** the deployment completes, **Then** automated smoke tests verify the health endpoint is accessible and responding correctly
 4. **Given** database migrations are pending, **When** the deployment pipeline runs, **Then** EF Core migrations execute automatically before the new application version starts
 5. **Given** the application is running in staging, **When** Application Insights is checked, **Then** telemetry data (requests, dependencies, traces) is being received and displayed
-6. **Given** secrets are required for the application, **When** the application starts in Azure, **Then** it retrieves all secrets from Key Vault using Managed Identity without exposing credentials in code or logs
+6. **Given** secrets are required for the application, **When** the application starts in Azure, **Then** it retrieves all secrets from Key Vault using Managed Identity without exposing credentials in code or logs (including database connection string, JWT signing key, and OAuth client secret placeholder)
 
 ---
 
@@ -65,6 +65,7 @@ As a DevOps engineer or developer, I need Azure infrastructure provisioned autom
 
 - **What happens when a developer is using an M1/M2 Mac?** Docker images (if used) must support ARM architecture, and platform-specific setup steps must be documented for silicon Macs
 - **What happens when Node.js or .NET SDK versions drift?** Lock Node version in `.nvmrc` file and document the required .NET 10+ SDK version in README files to ensure consistency
+- **What about HTTPS for local development vs cloud?** Local development uses HTTP (localhost:5000, localhost:5173) for simplicity and no certificate requirements. All cloud deployments (dev, staging, prod) enforce HTTPS-only via Azure App Service configuration with automatic SSL/TLS certificates
 - **What happens if Azure Key Vault access is denied?** Document troubleshooting steps for Managed Identity authorization issues, including how to verify role assignments and access policies
 - **What happens if a database migration fails during deployment?** The CI/CD pipeline must halt deployment immediately, preserve the previous version, and alert the team via configured notification channels
 - **What happens if CI/CD tests fail?** The pipeline must fail and block deployment, preventing broken code from reaching staging or production environments
@@ -99,7 +100,7 @@ As a DevOps engineer or developer, I need Azure infrastructure provisioned autom
 
 **Azure Infrastructure as Code:**
 
-- **FR-015**: System MUST provide Infrastructure as Code templates (Bicep or Terraform) in an `infrastructure/` directory that provision all required Azure resources
+- **FR-015**: System MUST provide Infrastructure as Code templates (Bicep) in an `infrastructure/` directory that provision all required Azure resources
 - **FR-016**: System MUST provision an Azure App Service with App Service Plan configured for at least 2 instances in production and 1 instance in staging
 - **FR-017**: System MUST provision an Azure SQL Database with zone-redundant backup configured for production
 - **FR-018**: System MUST provision Azure Blob Storage with RA-GRS geo-replication configured for production
@@ -110,7 +111,7 @@ As a DevOps engineer or developer, I need Azure infrastructure provisioned autom
 
 **Secrets Management:**
 
-- **FR-023**: Azure Key Vault MUST store database connection strings, blob storage account keys, OAuth client secrets, and JWT signing keys
+- **FR-023**: Azure Key Vault MUST store database connection strings, blob storage account keys, OAuth client secrets, and JWT signing keys (OAuth client secret created as placeholder for Feature 1 integration)
 - **FR-024**: System MUST inject secrets at application runtime via Managed Identity without storing them in code or configuration files
 - **FR-025**: System MUST never expose secrets in CI/CD pipeline logs or error messages
 
@@ -131,7 +132,7 @@ As a DevOps engineer or developer, I need Azure infrastructure provisioned autom
 - **FR-035**: System MUST configure Application Insights alerts for API latency exceeding 500ms at p95 percentile
 - **FR-036**: System MUST configure Application Insights alerts for error rate exceeding 1%
 - **FR-037**: System MUST send alert notifications to the team via configured channels (email or Slack)
-- **FR-038**: System MUST configure Azure Cost Management alerts at $500/month threshold
+- **FR-038**: System MUST configure Azure Cost Management alerts at $500/month threshold (Note: Azure Cost Management budgets cannot be provisioned via Bicep; requires manual Azure CLI or portal configuration as documented in runbooks)
 
 **Documentation:**
 
