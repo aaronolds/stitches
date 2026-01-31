@@ -160,6 +160,6 @@ As a DevOps engineer or developer, I need Azure infrastructure provisioned autom
 - **SC-007**: Automated smoke tests verify deployment health within 30 seconds post-deployment
 - **SC-008**: Application Insights successfully receives and displays telemetry data (requests, dependencies, traces) from staging environment
 - **SC-009**: Zero secrets are exposed in repository code, configuration files, or CI/CD pipeline logs
-- **SC-010**: Developer onboarding documentation is complete and enables a new team member to set up local environments without assistance
+- **SC-010**: Developer onboarding documentation is complete and enables a new team member to set up local environments within 15 minutes without assistance
 - **SC-011**: All unit tests (frontend and backend) pass successfully in local and CI/CD environments
 - **SC-012**: Database migrations execute successfully during deployment with rollback capability verified

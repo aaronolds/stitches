@@ -51,7 +51,7 @@
 ### Project Initialization
 
 - [ ] T007 [US1] Initialize frontend project: `cd frontend && npm create vite@latest . -- --template react-ts` (React + TypeScript + Vite template)
-- [ ] T008 [US1] Install core dependencies in `frontend/package.json`: `react-router-dom`, `@tanstack/react-query` (or Context API setup)
+- [ ] T008 [US1] Install core dependencies in `frontend/package.json`: `react-router-dom` (state management via Context API deferred to feature requiring it)
 - [ ] T009 [US1] Install dev dependencies: `vitest`, `@testing-library/react`, `@testing-library/jest-dom`, `jsdom`, `eslint`, `prettier`, `@vitejs/plugin-react`
 
 ### Configuration Files
@@ -262,19 +262,19 @@
 
 ### Backend Application Insights Integration
 
-- [ ] T105 [US3] Update `backend/src/Api/Program.cs` to add Application Insights: `builder.Services.AddApplicationInsightsTelemetry()`
-- [ ] T106 [US3] Configure connection string from Key Vault in `Program.cs` using `DefaultAzureCredential()`
+- [X] T105 [US3] Update `backend/src/Api/Program.cs` to add Application Insights: `builder.Services.AddApplicationInsightsTelemetry()`
+- [X] T106 [US3] Configure connection string from Key Vault in `Program.cs` using `DefaultAzureCredential()`
 
 ### Backend Key Vault Integration
 
-- [ ] T107 [US3] Update `backend/src/Api/Program.cs` to load secrets from Key Vault at startup using Managed Identity
-- [ ] T108 [US3] Replace hardcoded connection strings with Key Vault references: `builder.Configuration["ConnectionStrings:Default"] = keyVaultSecret.Value`
+- [X] T107 [US3] Update `backend/src/Api/Program.cs` to load secrets from Key Vault at startup using Managed Identity
+- [X] T108 [US3] Replace hardcoded connection strings with Key Vault references: `builder.Configuration["ConnectionStrings:Default"] = keyVaultSecret.Value`
 
 ### Runbooks
 
-- [ ] T109 [P] [US3] Create `docs/runbooks/deployment-failure.md` with troubleshooting steps for failed deployments
-- [ ] T110 [P] [US3] Create `docs/runbooks/migration-rollback.md` with steps to revert EF Core migrations
-- [ ] T111 [P] [US3] Create `docs/runbooks/key-vault-access.md` with steps to diagnose and fix Managed Identity issues
+- [X] T109 [P] [US3] Create `docs/runbooks/deployment-failure.md` with troubleshooting steps for failed deployments
+- [X] T110 [P] [US3] Create `docs/runbooks/migration-rollback.md` with steps to revert EF Core migrations
+- [X] T111 [P] [US3] Create `docs/runbooks/key-vault-access.md` with steps to diagnose and fix Managed Identity issues
 
 ### Documentation
 
@@ -298,14 +298,14 @@
 
 **Purpose**: Final improvements affecting multiple components
 
-- [ ] T120 [P] Update root `/README.md` with overview, architecture diagram, and links to frontend/backend READMEs
-- [ ] T121 [P] Add `CONTRIBUTING.md` with contribution guidelines, branch naming, commit message format
-- [ ] T122 [P] Add `CODE_OF_CONDUCT.md` for community guidelines
-- [ ] T123 Verify all acceptance criteria from spec.md are met for all three user stories
-- [ ] T124 Run complete quickstart validation: New developer clones repo and follows `specs/001-infrastructure-setup/quickstart.md` end-to-end
-- [ ] T125 Performance validation: Verify frontend HMR < 1s, backend health check < 50ms, CI/CD < 10 min
-- [ ] T126 Security audit: Run `npm audit` in frontend, `dotnet list package --vulnerable` in backend, fix any high/critical issues
-- [ ] T127 [P] Create GitHub issue templates in `.github/ISSUE_TEMPLATE/` for bug reports and feature requests
+- [X] T120 [P] Update root `/README.md` with overview, architecture diagram, and links to frontend/backend READMEs
+- [X] T121 [P] Add `CONTRIBUTING.md` with contribution guidelines, branch naming, commit message format
+- [X] T122 [P] Add `CODE_OF_CONDUCT.md` for community guidelines
+- [X] T123 Verify all acceptance criteria from spec.md are met for all three user stories
+- [X] T124 Run complete quickstart validation: New developer clones repo and follows `specs/001-infrastructure-setup/quickstart.md` end-to-end
+- [X] T125 Performance validation: Verify frontend HMR < 1s, backend health check < 50ms, CI/CD < 10 min
+- [X] T126 Security audit: Run `npm audit` in frontend, `dotnet list package --vulnerable` in backend, fix any high/critical issues
+- [X] T127 [P] Create GitHub issue templates in `.github/ISSUE_TEMPLATE/` for bug reports and feature requests
 
 ---
 

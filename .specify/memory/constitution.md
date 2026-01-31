@@ -121,7 +121,7 @@ Follows semantic versioning: MAJOR.MINOR.PATCH
 
 | Metric | Target | Measurement |
 |--------|--------|-------------|
-| **Availability** | 99.5% monthly | CloudWatch monitoring; incident if degraded |
+| **Availability** | 99.5% monthly | Azure Application Insights monitoring; incident if degraded |
 | **API latency (p95)** | < 200 ms | Excluding image processing; includes DB roundtrip |
 | **Canvas FPS** | 60 FPS | At 100×100 grid; test on iPad Gen 5 minimum |
 | **Autosave latency (p95)** | < 2 seconds | Debounced, optimistic UI update |

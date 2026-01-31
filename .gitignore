@@ -1,0 +1,56 @@
+# Node.js / Frontend
+node_modules/
+dist/
+.env.local
+.env.*.local
+coverage/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# .NET / Backend
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+*.userprefs
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+publish/
+
+# IDE / Editors
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Azure / Infrastructure
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
+appsettings.*.user.json
+
+# Test artifacts
+TestResults/
+coverage/
+*.trx
+
+# Misc
+*.tmp
+*.temp
+*.cache
