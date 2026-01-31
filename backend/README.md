@@ -60,6 +60,7 @@ tests/
 ### Local Development
 
 Configuration files:
+
 - `appsettings.json` - Shared defaults
 - `appsettings.Development.json` - Local development settings
 
@@ -98,6 +99,7 @@ docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=YourStrong@Passw0rd" \
 ```
 
 Update connection string in user secrets:
+
 ```bash
 dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost,1433;Database=Stitches;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True"
 ```
@@ -145,6 +147,7 @@ GET /api/health
 ```
 
 **Response**: `200 OK`
+
 ```json
 {
   "status": "healthy",

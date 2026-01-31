@@ -67,7 +67,7 @@ resource availabilityAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
           name: 'AvailabilityCriteria'
           metricName: 'availabilityResults/availabilityPercentage'
           operator: 'LessThan'
-          threshold: 99.5
+          threshold: 99
           timeAggregation: 'Average'
           criterionType: 'StaticThresholdCriterion'
         }

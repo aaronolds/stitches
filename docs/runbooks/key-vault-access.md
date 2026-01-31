@@ -23,6 +23,7 @@ az webapp show \
 ```
 
 Expected output should include:
+
 ```json
 {
   "principalId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
@@ -130,6 +131,7 @@ az webapp log tail \
 **Cause**: Missing RBAC role or access policy
 
 **Resolution**:
+
 ```bash
 # Grant Key Vault Secrets User role
 az role assignment create \
@@ -143,6 +145,7 @@ az role assignment create \
 **Cause**: Network restrictions or firewall rules
 
 **Check**:
+
 ```bash
 az keyvault show \
     --name kv-stitches-staging \
@@ -150,6 +153,7 @@ az keyvault show \
 ```
 
 **Resolution**:
+
 ```bash
 # Allow Azure services
 az keyvault update \
@@ -163,6 +167,7 @@ az keyvault update \
 **Cause**: Identity was disabled or not propagated
 
 **Resolution**:
+
 ```bash
 # Disable and re-enable
 az webapp identity assign \
@@ -175,6 +180,7 @@ az webapp identity assign \
 **Cause**: Cached identity token is stale
 
 **Resolution**: Restart the App Service
+
 ```bash
 az webapp restart \
     --resource-group stitches-staging \
@@ -194,6 +200,7 @@ var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
 ```
 
 Ensure you're logged in:
+
 ```bash
 az login
 ```

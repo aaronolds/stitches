@@ -30,6 +30,7 @@ dotnet ef migrations list --project src/Infrastructure --startup-project src/Api
 Find the migration you want to roll back TO (the last known good state).
 
 Example output:
+
 ```
 20260131000000_InitialCreate
 20260131120000_AddUserTable     <- Current (problematic)
@@ -158,6 +159,7 @@ cat rollback.sql | grep -i "DROP"
 ```
 
 **Warning**: If DROP commands affect tables with data, consider:
+
 1. Backing up the data first
 2. Planning data migration scripts
 3. Notifying stakeholders

@@ -51,12 +51,14 @@ cd backend && dotnet build --warnaserror
 **Symptoms**: `provision-infrastructure` job fails
 
 **Common Causes**:
+
 1. **Insufficient permissions**: Service principal lacks required Azure roles
 2. **Bicep syntax errors**: Invalid template
 3. **Resource conflicts**: Resource already exists with same name
 4. **Quota exceeded**: Subscription limits reached
 
 **Diagnosis**:
+
 ```bash
 # Validate Bicep locally
 az bicep build --file infrastructure/bicep/main.bicep
@@ -69,6 +71,7 @@ az deployment group show --resource-group stitches-staging --name <deployment-na
 ```
 
 **Resolution**:
+
 - Fix Bicep syntax errors
 - Request quota increase
 - Delete conflicting resources
@@ -79,11 +82,13 @@ az deployment group show --resource-group stitches-staging --name <deployment-na
 **Symptoms**: `migrate-database` job fails
 
 **Common Causes**:
+
 1. **Connection string invalid**: Wrong Key Vault secret value
 2. **Migration conflicts**: Pending migrations or model drift
 3. **Database locked**: Concurrent access issues
 
 **Diagnosis**:
+
 ```bash
 # Check pending migrations
 cd backend
@@ -94,6 +99,7 @@ dotnet ef migrations script --project src/Infrastructure --startup-project src/A
 ```
 
 **Resolution**:
+
 - Verify connection string in Key Vault
 - Review pending migrations
 - See [Migration Rollback Runbook](migration-rollback.md)
@@ -103,11 +109,13 @@ dotnet ef migrations script --project src/Infrastructure --startup-project src/A
 **Symptoms**: `deploy-app` job fails
 
 **Common Causes**:
+
 1. **Package issues**: Corrupted artifacts
 2. **Startup failures**: Missing configuration
 3. **Permission issues**: Managed Identity not configured
 
 **Diagnosis**:
+
 ```bash
 # Check App Service logs
 az webapp log tail --resource-group stitches-staging --name app-stitches-staging
@@ -117,6 +125,7 @@ az webapp show --resource-group stitches-staging --name app-stitches-staging --q
 ```
 
 **Resolution**:
+
 - Re-run deployment
 - Check App Service configuration
 - Verify Key Vault access
@@ -126,11 +135,13 @@ az webapp show --resource-group stitches-staging --name app-stitches-staging --q
 **Symptoms**: `smoke-test` job fails
 
 **Common Causes**:
+
 1. **Application not started**: Startup exception
 2. **Health endpoint not responding**: Routing issues
 3. **Timeout**: Slow cold start
 
 **Diagnosis**:
+
 ```bash
 # Manual health check
 curl -v https://app-stitches-staging.azurewebsites.net/api/health
@@ -140,6 +151,7 @@ az webapp log tail --resource-group stitches-staging --name app-stitches-staging
 ```
 
 **Resolution**:
+
 - Review application startup logs
 - Check health endpoint implementation
 - Verify all dependencies (database, Key Vault) are accessible

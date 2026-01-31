@@ -114,7 +114,7 @@
 | `id` | string | Unique deployment identifier | Required. UUID format |
 | `environmentName` | string | Target environment | Required. One of: "dev", "staging", "prod" |
 | `timestamp` | datetime | Deployment start time | Required. ISO 8601 format |
-| `triggeredBy` | string | User or system that initiated | Required. E.g., "github-actions", "user@example.com" |
+| `triggeredBy` | string | User or system that initiated | Required. E.g., "github-actions", "<user@example.com>" |
 | `gitCommitSha` | string | Source code commit hash | Required. Git SHA-1 format (40 hex chars) |
 | `gitBranch` | string | Source branch | Required. E.g., "main", "feature/001" |
 | `frontendArtifact` | object | React bundle metadata | Required. Contains `path`, `sizeBytes`, `buildDurationMs` |
@@ -179,13 +179,13 @@ in-progress → failed (if any step fails)
 | Property | Type | Description | Constraints |
 |----------|------|-------------|-------------|
 | `name` | string | Secret identifier | Required. E.g., "DatabaseConnectionString", "OAuthClientSecret" |
-| `keyVaultUrl` | string | Azure Key Vault URL | Required. E.g., "https://kv-stitches-prod.vault.azure.net/" |
+| `keyVaultUrl` | string | Azure Key Vault URL | Required. E.g., "<https://kv-stitches-prod.vault.azure.net/>" |
 | `type` | string | Secret category | Required. One of: "ConnectionString", "ApiKey", "Certificate", "Other" |
 | `rotationScheduleDays` | number | Days between required rotations | Optional. Default: 90 |
 | `lastRotatedAt` | datetime | Last rotation timestamp | Optional. Null if never rotated |
 | `nextRotationDue` | datetime | Next required rotation | Optional. Calculated from lastRotatedAt + rotationScheduleDays |
 | `lastAccessedAt` | datetime | Last retrieval timestamp | Optional. Updated by Key Vault audit logs |
-| `createdBy` | string | User or system that created secret | Required. E.g., "admin@example.com", "terraform" |
+| `createdBy` | string | User or system that created secret | Required. E.g., "<admin@example.com>", "terraform" |
 | `environmentName` | string | Associated environment | Required. One of: "dev", "staging", "prod" |
 | `isActive` | boolean | Whether secret is currently used | Required. Default: true |
 
@@ -246,16 +246,19 @@ InfrastructureResource (Many) ──< (Many) InfrastructureResource [self-refere
 ### Query Patterns
 
 **Get all resources for an environment**:
+
 ```bash
 az resource list --resource-group stitches-staging --output json
 ```
 
 **Get latest deployment for environment**:
+
 ```bash
 az deployment group list --resource-group stitches-staging --query "[0]"
 ```
 
 **Check secret rotation status**:
+
 ```bash
 az keyvault secret show --vault-name kv-stitches-prod --name DatabaseConnectionString --query attributes
 ```
