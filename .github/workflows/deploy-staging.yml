@@ -123,6 +123,7 @@ jobs:
       - name: Deploy Bicep
         uses: azure/arm-deploy@v2
         with:
+          scope: resourcegroup
           resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
           template: infrastructure/bicep/main.bicep
           parameters: infrastructure/bicep/parameters/staging.parameters.json
