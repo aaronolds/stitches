@@ -13,12 +13,16 @@ param location string
 @allowed(['Local', 'Zone', 'Geo'])
 param backupRedundancy string
 
+@description('SQL Server administrator password')
+@secure()
+param administratorLoginPassword string
+
 resource sqlServer 'Microsoft.Sql/servers@2023-08-01-preview' = {
   name: serverName
   location: location
   properties: {
     administratorLogin: 'sqladmin'
-    administratorLoginPassword: 'PLACEHOLDER_CHANGE_ME' // Should be replaced with Key Vault reference
+    administratorLoginPassword: administratorLoginPassword
     version: '12.0'
     minimalTlsVersion: '1.2'
     publicNetworkAccess: 'Enabled'
