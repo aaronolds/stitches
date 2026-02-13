@@ -46,7 +46,7 @@ COMPLEXITY_COUNT=0
 [[ "${SQL_ADMIN_PASSWORD}" =~ [A-Z] ]] && COMPLEXITY_COUNT=$((COMPLEXITY_COUNT + 1))
 [[ "${SQL_ADMIN_PASSWORD}" =~ [a-z] ]] && COMPLEXITY_COUNT=$((COMPLEXITY_COUNT + 1))
 [[ "${SQL_ADMIN_PASSWORD}" =~ [0-9] ]] && COMPLEXITY_COUNT=$((COMPLEXITY_COUNT + 1))
-# Check for allowed special characters using grep
+# Check for allowed special characters using grep (hyphen at end of character class)
 echo "${SQL_ADMIN_PASSWORD}" | grep -q '[@#%^&*_+-]' && COMPLEXITY_COUNT=$((COMPLEXITY_COUNT + 1))
 
 if [[ ${COMPLEXITY_COUNT} -lt 3 ]]; then
