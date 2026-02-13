@@ -13,6 +13,7 @@ This feature establishes the foundational development and deployment infrastruct
 No application code can be written or deployed without proper development environments and infrastructure. This feature must complete before any user-facing functionality can be implemented.
 
 **What this enables:**
+
 - Developers can run frontend and backend locally
 - Azure resources are provisioned and managed via Infrastructure as Code
 - Automated CI/CD pipeline deploys to staging and production
@@ -25,6 +26,7 @@ No application code can be written or deployed without proper development enviro
 **As** a frontend developer, **I want** a React + Vite development environment configured and running locally, **so that** I can develop UI components and interact with the backend API.
 
 ### Priority
+
 **P0** - Must complete before any frontend development
 
 ### Acceptance Criteria
@@ -68,9 +70,11 @@ No application code can be written or deployed without proper development enviro
    - Commands documented: dev, build, test, lint
 
 ### Independent Test
+
 Clone the repository, run `cd frontend && npm install && npm run dev`, navigate to `http://localhost:5173`, see React welcome page with no console errors.
 
 ### Technical References
+
 - **Constitution:** Mandates React (Vite build, Context API or Redux)
 - **SDD Section 7:** Frontend Design (React SPA)
 - **SDD Section 7.3:** Authentication UX Flow requirements
@@ -82,6 +86,7 @@ Clone the repository, run `cd frontend && npm install && npm run dev`, navigate 
 **As** a backend developer, **I want** an ASP.NET Core 10+ API configured and running locally, **so that** I can develop REST endpoints and integrate with Azure services.
 
 ### Priority
+
 **P0** - Must complete before any backend development
 
 ### Acceptance Criteria
@@ -132,9 +137,11 @@ Clone the repository, run `cd frontend && npm install && npm run dev`, navigate 
    - Commands documented: run, test, migrate, lint
 
 ### Independent Test
+
 Clone the repository, run `cd backend && dotnet restore && dotnet run`, navigate to `http://localhost:5000/swagger`, see Swagger UI with health endpoint documented.
 
 ### Technical References
+
 - **Constitution:** Mandates ASP.NET Core 10+ (C#, REST API)
 - **SDD Section 8:** Backend Design (ASP.NET Core)
 - **SDD Section 8.1:** Layering (API, Application, Domain, Infrastructure)
@@ -146,6 +153,7 @@ Clone the repository, run `cd backend && dotnet restore && dotnet run`, navigate
 **As** a DevOps engineer, **I want** Azure infrastructure provisioned via Infrastructure as Code (IaC) with CI/CD automation, **so that** the application can be deployed to staging and production environments.
 
 ### Priority
+
 **P0** - Must complete before any cloud deployment
 
 ### Acceptance Criteria
@@ -208,9 +216,11 @@ Clone the repository, run `cd backend && dotnet restore && dotnet run`, navigate
    - Runbook for common failure scenarios
 
 ### Independent Test
+
 Run IaC provisioning script (e.g., `az deployment group create`), verify all Azure resources are created in the portal, run CI/CD pipeline, verify application deploys to staging with health check passing.
 
 ### Technical References
+
 - **Constitution Section: Architecture & Technology Stack** - Mandatory Azure services
 - **Constitution Section: Security & Data Governance** - Secrets management requirements
 - **SDD Section 10:** Non-Functional Requirements (reliability, security)
@@ -221,18 +231,21 @@ Run IaC provisioning script (e.g., `az deployment group create`), verify all Azu
 ## Edge Cases & Considerations
 
 ### Development Environment
+
 - **M1/M2 Mac compatibility:** Ensure Docker images (if used) support ARM architecture
 - **Windows vs macOS/Linux:** Document any platform-specific setup steps
 - **Node.js version drift:** Lock Node version in `.nvmrc` file
 - **.NET SDK version drift:** Document required .NET 10+ SDK version
 
 ### Azure Infrastructure
+
 - **Cost overruns:** Set up Azure Cost Management alerts at $500/month threshold
 - **Region availability:** What if chosen region has outage? (MVP accepts single-region risk per SDD)
 - **Key Vault access denied:** Document troubleshooting for Managed Identity authorization issues
 - **Database migration failures:** Pipeline must halt deployment and alert team
 
 ### CI/CD Pipeline
+
 - **Test failures:** Pipeline must fail and block deployment if tests fail
 - **Secrets in logs:** Ensure pipeline masks secrets in output
 - **Long-running builds:** Set reasonable timeout (e.g., 15 minutes)
@@ -241,7 +254,8 @@ Run IaC provisioning script (e.g., `az deployment group create`), verify all Azu
 
 ## Success Criteria
 
-### Feature 0 Complete When:
+### Feature 0 Complete When
+
 - ✅ Frontend dev server runs locally without errors
 - ✅ Backend API runs locally and responds to health checks
 - ✅ Azure infrastructure provisioned in staging environment
@@ -251,6 +265,7 @@ Run IaC provisioning script (e.g., `az deployment group create`), verify all Azu
 - ✅ Documentation complete for developer onboarding
 
 ### Performance Targets (Foundation)
+
 - Local frontend hot reload < 1 second
 - Local backend API response < 50 ms for health endpoint
 - Azure deployment (staging) completes in < 10 minutes
@@ -261,12 +276,14 @@ Run IaC provisioning script (e.g., `az deployment group create`), verify all Azu
 ## Dependencies & Blockers
 
 **External Dependencies:**
+
 - Azure subscription with sufficient quota
 - GitHub repository with Actions enabled (or Azure DevOps project)
 - Domain name for production (optional for MVP, can use azurewebsites.net)
 - OAuth provider configuration (Auth0 or Azure AD B2C) - needed for Feature 1, but infrastructure should be ready
 
 **Team Requirements:**
+
 - Access to Azure portal with Contributor role
 - .NET 10+ SDK installed locally
 - Node.js 20+ installed locally
@@ -277,12 +294,14 @@ Run IaC provisioning script (e.g., `az deployment group create`), verify all Azu
 ## Follow-up Work (Post-Feature 0)
 
 After Feature 0 completes, the following becomes possible:
+
 - **Feature 1** can implement authentication with OAuth provider configured in Key Vault
 - **Feature 2** can develop frontend canvas against local backend API
 - **Feature 3** can implement async image processing with Azure Blob Storage
 - **Feature 4** can generate exports and store in Blob Storage
 
 **Infrastructure Refinements (v1.1):**
+
 - Multi-region failover setup
 - Terraform modules for reusable components
 - Blue-green deployment strategy

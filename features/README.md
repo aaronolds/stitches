@@ -18,11 +18,13 @@ This directory contains the feature breakdown for the Stitches cross-stitch patt
 **Blocks:** All other features
 
 **User Stories:**
+
 - 0.1: Frontend Development Environment Setup (React + Vite)
 - 0.2: Backend Development Environment Setup (ASP.NET Core 10+)
 - 0.3: Azure Deployment Infrastructure (IaC + CI/CD)
 
 **What this enables:**
+
 - Local development environment for frontend and backend
 - Azure infrastructure provisioned and ready
 - CI/CD pipeline for automated deployments
@@ -37,10 +39,12 @@ This directory contains the feature breakdown for the Stitches cross-stitch patt
 **Blocks:** Features 2, 3, 4
 
 **User Stories from PRD:**
+
 - Story #5: User Authentication & Design Storage
 - Story #4: Autosave & Draft Recovery
 
 **What this enables:**
+
 - Users can log in with OAuth (Google, Facebook, Apple, Microsoft)
 - Designs are persisted to Azure SQL Database
 - Cloud-based storage across devices
@@ -56,10 +60,12 @@ This directory contains the feature breakdown for the Stitches cross-stitch patt
 **Required for:** Features 3, 4
 
 **User Stories from PRD:**
+
 - Story #2: Interactive Pattern Editor
 - Story #7: Colour Palette & Symbols
 
 **What this enables:**
+
 - Manual pattern creation from scratch
 - Interactive grid with stitch editing
 - 200+ DMC thread colours with symbol assignments
@@ -75,10 +81,12 @@ This directory contains the feature breakdown for the Stitches cross-stitch patt
 **Can develop in parallel with:** Feature 4
 
 **User Stories from PRD:**
+
 - Story #1: Photo Import & Auto-Conversion
 - Story #3: Lettering (Text to Stitches)
 
 **What this enables:**
+
 - Quick pattern creation from photos
 - Photo-to-grid conversion with DMC colour mapping
 - Text personalization (names, dates, messages)
@@ -94,9 +102,11 @@ This directory contains the feature breakdown for the Stitches cross-stitch patt
 **Can develop in parallel with:** Feature 3
 
 **User Stories from PRD:**
+
 - Story #6: Export to PDF & PNG
 
 **What this enables:**
+
 - High-quality PDF generation for printing
 - 300 DPI PNG for digital sharing
 - Pattern grid with colour legend and stitch count
@@ -107,40 +117,47 @@ This directory contains the feature breakdown for the Stitches cross-stitch patt
 ## Implementation Sequence
 
 ### Phase 0: Infrastructure (Must Complete First)
-```
+
+```text
 Feature 0: Infrastructure Setup
 ├── Frontend environment
 ├── Backend environment
 └── Azure deployment pipeline
 ```
+
 **Checkpoint:** Dev environments working, Azure infrastructure provisioned
 
 ---
 
 ### Phase 1: Foundation (Sequential)
-```
+
+```text
 Feature 0 ────► Feature 1: Auth & Persistence
                 └─► Authentication working
                 └─► Design CRUD operational
                 └─► Autosave functional
 ```
+
 **Checkpoint:** Users can log in, create designs, and autosave works
 
 ---
 
 ### Phase 2: Core Experience (Sequential)
-```
+
+```text
 Feature 1 ────► Feature 2: Core Editor
                 └─► Canvas rendering
                 └─► Stitch editing
                 └─► Palette management
 ```
+
 **Checkpoint:** Users can manually create and edit patterns (MVP!)
 
 ---
 
 ### Phase 3: Content & Output (Parallel)
-```
+
+```text
 Feature 2 ────┬─► Feature 3: Content Generation
               │   └─► Photo import
               │   └─► Lettering
@@ -149,13 +166,14 @@ Feature 2 ────┬─► Feature 3: Content Generation
                   └─► PDF generation
                   └─► PNG generation
 ```
+
 **Checkpoint:** Full workflow - import → edit → export
 
 ---
 
 ## Dependency Graph
 
-```
+```text
 ┌─────────────────────────────────────┐
 │  Feature 0: Infrastructure (P0)     │
 │  - Frontend setup                   │
@@ -195,6 +213,7 @@ Feature 2 ────┬─► Feature 3: Content Generation
 ## Development Strategy
 
 ### MVP-First Approach (Recommended)
+
 1. **Complete Feature 0** → Infrastructure ready
 2. **Complete Feature 1** → Users can authenticate and save designs
 3. **Complete Feature 2** → Users can manually create patterns ✅ **MVP ACHIEVED**
@@ -203,7 +222,9 @@ Feature 2 ────┬─► Feature 3: Content Generation
 6. **Complete remaining features** → Full feature set
 
 ### Parallel Team Strategy
+
 If multiple developers available:
+
 1. **All hands on Feature 0** → Complete infrastructure together
 2. **Team splits after Feature 1 complete:**
    - Team A: Feature 3 (Content Generation)
@@ -215,18 +236,21 @@ If multiple developers available:
 ## Success Criteria by Feature
 
 ### Feature 0 Success
+
 - ✅ Frontend dev server runs locally
 - ✅ Backend API runs locally
 - ✅ Azure resources provisioned via IaC
 - ✅ CI/CD pipeline deploys to staging
 
 ### Feature 1 Success
+
 - ✅ Users can log in with OAuth
 - ✅ Designs CRUD operations work
 - ✅ Autosave triggers every 30 seconds
 - ✅ Draft recovery after browser crash
 
 ### Feature 2 Success (MVP)
+
 - ✅ Users can create blank canvas
 - ✅ Users can add/remove stitches
 - ✅ Colour palette works with 200+ DMC colours
@@ -234,12 +258,14 @@ If multiple developers available:
 - ✅ 60 FPS at 100×100 grid
 
 ### Feature 3 Success
+
 - ✅ Photo upload and conversion < 10 seconds
 - ✅ User satisfaction ≥ 4/5 on conversion quality
 - ✅ Text rendering with Google Fonts
 - ✅ Rasterized content can be refined
 
 ### Feature 4 Success
+
 - ✅ PDF export < 5 seconds
 - ✅ PDF includes grid, legend, stitch count
 - ✅ PNG exports at 300 DPI
@@ -258,6 +284,7 @@ All features adhere to the [Project Constitution](../.specify/memory/constitutio
 - **Performance-First Design:** All features target constitution SLOs
 
 **Mandatory Tech Stack Compliance:**
+
 - Frontend: React + Vite ✓
 - Backend: ASP.NET Core 10+ ✓
 - Database: Azure SQL Database ✓

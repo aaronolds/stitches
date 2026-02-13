@@ -22,9 +22,9 @@
 
 **Purpose**: Initialize repository structure and documentation
 
-- [ ] T001 Create root-level directory structure: `frontend/`, `backend/`, `infrastructure/`, `.github/workflows/`
-- [ ] T002 [P] Create `.gitignore` with patterns for Node.js (`node_modules/`, `.env.local`), .NET (`bin/`, `obj/`, `*.user`), and IDE files
-- [ ] T003 [P] Copy quickstart instructions from `specs/001-infrastructure-setup/quickstart.md` to root `README.md`
+- [x] T001 Create root-level directory structure: `frontend/`, `backend/`, `infrastructure/`, `.github/workflows/`
+- [x] T002 [P] Create `.gitignore` with patterns for Node.js (`node_modules/`, `.env.local`), .NET (`bin/`, `obj/`, `*.user`), and IDE files
+- [x] T003 [P] Copy quickstart instructions from `specs/001-infrastructure-setup/quickstart.md` to root `README.md`
 
 **Checkpoint**: Repository structure ready for environment-specific implementation
 
@@ -34,9 +34,9 @@
 
 **Purpose**: Shared configurations that all user stories depend on
 
-- [ ] T004 [P] Create `.nvmrc` with `20.0.0` to lock Node.js version for frontend
-- [ ] T005 [P] Create `backend/Stitches.sln` solution file referencing all C# projects (Api, Application, Domain, Infrastructure)
-- [ ] T006 [P] Create `infrastructure/README.md` with Azure provisioning instructions and runbook links
+- [x] T004 [P] Create `.nvmrc` with `20.0.0` to lock Node.js version for frontend
+- [x] T005 [P] Create `backend/Stitches.sln` solution file referencing all C# projects (Api, Application, Domain, Infrastructure)
+- [x] T006 [P] Create `infrastructure/README.md` with Azure provisioning instructions and runbook links
 
 **Checkpoint**: Foundation ready - user story implementation can begin in parallel
 
@@ -50,52 +50,52 @@
 
 ### Project Initialization
 
-- [ ] T007 [US1] Initialize frontend project: `cd frontend && npm create vite@latest . -- --template react-ts` (React + TypeScript + Vite template)
-- [ ] T008 [US1] Install core dependencies in `frontend/package.json`: `react-router-dom` (state management via Context API deferred to feature requiring it)
-- [ ] T009 [US1] Install dev dependencies: `vitest`, `@testing-library/react`, `@testing-library/jest-dom`, `jsdom`, `eslint`, `prettier`, `@vitejs/plugin-react`
+- [x] T007 [US1] Initialize frontend project: `cd frontend && npm create vite@latest . -- --template react-ts` (React + TypeScript + Vite template)
+- [x] T008 [US1] Install core dependencies in `frontend/package.json`: `react-router-dom` (state management via Context API deferred to feature requiring it)
+- [x] T009 [US1] Install dev dependencies: `vitest`, `@testing-library/react`, `@testing-library/jest-dom`, `jsdom`, `eslint`, `prettier`, `@vitejs/plugin-react`
 
 ### Configuration Files
 
-- [ ] T010 [P] [US1] Create `frontend/vite.config.ts` with React plugin, dev server on port 5173, proxy `/api` to `http://localhost:5000`
-- [ ] T011 [P] [US1] Create `frontend/tsconfig.json` with strict mode enabled, paths configured for `@/` alias to `src/`
-- [ ] T012 [P] [US1] Create `frontend/vitest.config.ts` with jsdom environment, globals enabled, setupFiles pointing to `tests/setup.ts`
-- [ ] T013 [P] [US1] Create `frontend/.eslintrc.js` extending recommended React, hooks, TypeScript rules, and Prettier
-- [ ] T014 [P] [US1] Create `frontend/.prettierrc` with standard formatting rules (semi: true, singleQuote: true, tabWidth: 2)
+- [x] T010 [P] [US1] Create `frontend/vite.config.ts` with React plugin, dev server on port 5173, proxy `/api` to `http://localhost:5000`
+- [x] T011 [P] [US1] Create `frontend/tsconfig.json` with strict mode enabled, paths configured for `@/` alias to `src/`
+- [x] T012 [P] [US1] Create `frontend/vitest.config.ts` with jsdom environment, globals enabled, setupFiles pointing to `tests/setup.ts`
+- [x] T013 [P] [US1] Create `frontend/.eslintrc.js` extending recommended React, hooks, TypeScript rules, and Prettier
+- [x] T014 [P] [US1] Create `frontend/.prettierrc` with standard formatting rules (semi: true, singleQuote: true, tabWidth: 2)
 
 ### Project Structure
 
-- [ ] T015 [P] [US1] Create directory structure: `src/components/`, `src/pages/`, `src/services/`, `src/assets/`, `src/styles/`
-- [ ] T016 [P] [US1] Create `tests/unit/` and `tests/integration/` directories
-- [ ] T017 [P] [US1] Create `tests/setup.ts` with Testing Library global configuration and cleanup
+- [x] T015 [P] [US1] Create directory structure: `src/components/`, `src/pages/`, `src/services/`, `src/assets/`, `src/styles/`
+- [x] T016 [P] [US1] Create `tests/unit/` and `tests/integration/` directories
+- [x] T017 [P] [US1] Create `tests/setup.ts` with Testing Library global configuration and cleanup
 
 ### Environment Configuration
 
-- [ ] T018 [P] [US1] Create `frontend/.env.example` with `VITE_API_URL=http://localhost:5000`
-- [ ] T019 [US1] Create `frontend/.env.local` (gitignored) with same variables for local development
-- [ ] T020 [US1] Update `frontend/.gitignore` to include `.env.local`, `dist/`, `coverage/`
+- [x] T018 [P] [US1] Create `frontend/.env.example` with `VITE_API_URL=http://localhost:5000`
+- [x] T019 [US1] Create `frontend/.env.local` (gitignored) with same variables for local development
+- [x] T020 [US1] Update `frontend/.gitignore` to include `.env.local`, `dist/`, `coverage/`
 
 ### Testing Setup
 
-- [ ] T021 [P] [US1] Create example component test in `tests/unit/App.test.tsx` verifying App renders without crashing
-- [ ] T022 [US1] Add test script to `package.json`: `"test": "vitest"`, `"test:ui": "vitest --ui"`
+- [x] T021 [P] [US1] Create example component test in `tests/unit/App.test.tsx` verifying App renders without crashing
+- [x] T022 [US1] Add test script to `package.json`: `"test": "vitest"`, `"test:ui": "vitest --ui"`
 
 ### Linting & Formatting
 
-- [ ] T023 [US1] Add lint scripts to `package.json`: `"lint": "eslint src --ext ts,tsx"`, `"format": "prettier --write src/**/*.{ts,tsx}"`
-- [ ] T024 [US1] Install Husky and lint-staged for pre-commit hooks: `npx husky-init && npm install --save-dev lint-staged`
-- [ ] T025 [US1] Configure `.husky/pre-commit` to run `npx lint-staged` with ESLint on staged files
+- [x] T023 [US1] Add lint scripts to `package.json`: `"lint": "eslint src --ext ts,tsx"`, `"format": "prettier --write src/**/*.{ts,tsx}"`
+- [x] T024 [US1] Install Husky and lint-staged for pre-commit hooks: `npx husky-init && npm install --save-dev lint-staged`
+- [x] T025 [US1] Configure `.husky/pre-commit` to run `npx lint-staged` with ESLint on staged files
 
 ### Documentation
 
-- [ ] T026 [US1] Create `frontend/README.md` with setup steps, prerequisites (Node 20+), and commands (dev, build, test, lint)
+- [x] T026 [US1] Create `frontend/README.md` with setup steps, prerequisites (Node 20+), and commands (dev, build, test, lint)
 
 ### Verification
 
-- [ ] T027 [US1] Run `npm install` and verify no errors
-- [ ] T028 [US1] Run `npm run dev` and verify server starts on `http://localhost:5173`
-- [ ] T029 [US1] Run `npm test` and verify example test passes
-- [ ] T030 [US1] Run `npm run lint` and verify no ESLint errors
-- [ ] T031 [US1] Test HMR: Modify `src/App.tsx`, save, verify browser updates in < 1 second
+- [x] T027 [US1] Run `npm install` and verify no errors
+- [x] T028 [US1] Run `npm run dev` and verify server starts on `http://localhost:5173`
+- [x] T029 [US1] Run `npm test` and verify example test passes
+- [x] T030 [US1] Run `npm run lint` and verify no ESLint errors
+- [x] T031 [US1] Test HMR: Modify `src/App.tsx`, save, verify browser updates in < 1 second
 
 **Checkpoint**: Frontend environment complete and independently functional
 
@@ -109,74 +109,74 @@
 
 ### Project Initialization
 
-- [ ] T032 [US2] Create solution: `cd backend && dotnet new sln -n Stitches`
-- [ ] T033 [US2] Create Api project: `dotnet new webapi -n Api -o src/Api --framework net10.0`
-- [ ] T034 [US2] Create Application project: `dotnet new classlib -n Application -o src/Application --framework net10.0`
-- [ ] T035 [US2] Create Domain project: `dotnet new classlib -n Domain -o src/Domain --framework net10.0`
-- [ ] T036 [US2] Create Infrastructure project: `dotnet new classlib -n Infrastructure -o src/Infrastructure --framework net10.0`
-- [ ] T037 [US2] Add projects to solution: `dotnet sln add src/Api src/Application src/Domain src/Infrastructure`
+- [x] T032 [US2] Create solution: `cd backend && dotnet new sln -n Stitches`
+- [x] T033 [US2] Create Api project: `dotnet new webapi -n Api -o src/Api --framework net10.0`
+- [x] T034 [US2] Create Application project: `dotnet new classlib -n Application -o src/Application --framework net10.0`
+- [x] T035 [US2] Create Domain project: `dotnet new classlib -n Domain -o src/Domain --framework net10.0`
+- [x] T036 [US2] Create Infrastructure project: `dotnet new classlib -n Infrastructure -o src/Infrastructure --framework net10.0`
+- [x] T037 [US2] Add projects to solution: `dotnet sln add src/Api src/Application src/Domain src/Infrastructure`
 
 ### Test Projects
 
-- [ ] T038 [P] [US2] Create Api.Tests: `dotnet new xunit -n Api.Tests -o tests/Api.Tests --framework net10.0`
-- [ ] T039 [P] [US2] Create Application.Tests: `dotnet new xunit -n Application.Tests -o tests/Application.Tests --framework net10.0`
-- [ ] T040 [P] [US2] Create Domain.Tests: `dotnet new xunit -n Domain.Tests -o tests/Domain.Tests --framework net10.0`
-- [ ] T041 [P] [US2] Create Integration.Tests: `dotnet new xunit -n Integration.Tests -o tests/Integration.Tests --framework net10.0`
-- [ ] T042 [US2] Add test projects to solution: `dotnet sln add tests/Api.Tests tests/Application.Tests tests/Domain.Tests tests/Integration.Tests`
+- [x] T038 [P] [US2] Create Api.Tests: `dotnet new xunit -n Api.Tests -o tests/Api.Tests --framework net10.0`
+- [x] T039 [P] [US2] Create Application.Tests: `dotnet new xunit -n Application.Tests -o tests/Application.Tests --framework net10.0`
+- [x] T040 [P] [US2] Create Domain.Tests: `dotnet new xunit -n Domain.Tests -o tests/Domain.Tests --framework net10.0`
+- [x] T041 [P] [US2] Create Integration.Tests: `dotnet new xunit -n Integration.Tests -o tests/Integration.Tests --framework net10.0`
+- [x] T042 [US2] Add test projects to solution: `dotnet sln add tests/Api.Tests tests/Application.Tests tests/Domain.Tests tests/Integration.Tests`
 
 ### Dependencies
 
-- [ ] T043 [US2] Add project references: Api → Application, Infrastructure; Application → Domain; Infrastructure → Domain
-- [ ] T044 [US2] Install NuGet packages in Api: `Swashbuckle.AspNetCore`, `Microsoft.ApplicationInsights.AspNetCore`, `Azure.Identity`, `Azure.Security.KeyVault.Secrets`
-- [ ] T045 [US2] Install NuGet packages in Infrastructure: `Microsoft.EntityFrameworkCore.SqlServer`, `Microsoft.EntityFrameworkCore.Tools`, `Microsoft.EntityFrameworkCore.Design`
-- [ ] T046 [US2] Install NuGet packages in test projects: `NSubstitute`, `FluentAssertions`, `Microsoft.AspNetCore.Mvc.Testing` (for Integration.Tests)
+- [x] T043 [US2] Add project references: Api → Application, Infrastructure; Application → Domain; Infrastructure → Domain
+- [x] T044 [US2] Install NuGet packages in Api: `Swashbuckle.AspNetCore`, `Microsoft.ApplicationInsights.AspNetCore`, `Azure.Identity`, `Azure.Security.KeyVault.Secrets`
+- [x] T045 [US2] Install NuGet packages in Infrastructure: `Microsoft.EntityFrameworkCore.SqlServer`, `Microsoft.EntityFrameworkCore.Tools`, `Microsoft.EntityFrameworkCore.Design`
+- [x] T046 [US2] Install NuGet packages in test projects: `NSubstitute`, `FluentAssertions`, `Microsoft.AspNetCore.Mvc.Testing` (for Integration.Tests)
 
 ### Configuration Files
 
-- [ ] T047 [P] [US2] Create `backend/.editorconfig` with C# style rules (naming conventions, indentation, code analysis)
-- [ ] T048 [P] [US2] Create `backend/appsettings.json` with shared defaults (no connection strings or secrets)
-- [ ] T049 [P] [US2] Create `backend/appsettings.Development.json` with LocalDB connection string: `Server=(localdb)\\mssqllocaldb;Database=Stitches;Trusted_Connection=True`
-- [ ] T050 [US2] Update `backend/.gitignore` to include `appsettings.*.user.json`, `bin/`, `obj/`, `*.user`
+- [x] T047 [P] [US2] Create `backend/.editorconfig` with C# style rules (naming conventions, indentation, code analysis)
+- [x] T048 [P] [US2] Create `backend/appsettings.json` with shared defaults (no connection strings or secrets)
+- [x] T049 [P] [US2] Create `backend/appsettings.Development.json` with LocalDB connection string: `Server=(localdb)\\mssqllocaldb;Database=Stitches;Trusted_Connection=True`
+- [x] T050 [US2] Update `backend/.gitignore` to include `appsettings.*.user.json`, `bin/`, `obj/`, `*.user`
 
 ### Health Check Implementation
 
-- [ ] T051 [US2] Create `src/Api/Controllers/HealthController.cs` with GET endpoint returning `{ status: "healthy", timestamp: DateTime.UtcNow }`
-- [ ] T052 [US2] Configure `src/Api/Program.cs` with health checks middleware: `builder.Services.AddHealthChecks()`, `app.MapHealthChecks("/api/health")`
+- [x] T051 [US2] Create `src/Api/Controllers/HealthController.cs` with GET endpoint returning `{ status: "healthy", timestamp: DateTime.UtcNow }`
+- [x] T052 [US2] Configure `src/Api/Program.cs` with health checks middleware: `builder.Services.AddHealthChecks()`, `app.MapHealthChecks("/api/health")`
 
 ### Swagger Configuration
 
-- [ ] T053 [US2] Configure Swagger in `src/Api/Program.cs`: `builder.Services.AddSwaggerGen()`, enable only in Development environment
-- [ ] T054 [US2] Add XML documentation comments to HealthController for Swagger UI display
+- [x] T053 [US2] Configure Swagger in `src/Api/Program.cs`: `builder.Services.AddSwaggerGen()`, enable only in Development environment
+- [x] T054 [US2] Add XML documentation comments to HealthController for Swagger UI display
 
 ### Database Setup
 
-- [ ] T055 [US2] Create `src/Infrastructure/Data/ApplicationDbContext.cs` inheriting from `DbContext`
-- [ ] T056 [US2] Register DbContext in `src/Api/Program.cs`: `builder.Services.AddDbContext<ApplicationDbContext>()` with connection string from configuration
-- [ ] T057 [US2] Initialize EF Core migrations: `cd src/Infrastructure && dotnet ef migrations add InitialCreate --startup-project ../Api`
-- [ ] T058 [US2] Configure migration assembly in `ApplicationDbContext`: `optionsBuilder.UseSqlServer(x => x.MigrationsAssembly("Infrastructure"))`
+- [x] T055 [US2] Create `src/Infrastructure/Data/ApplicationDbContext.cs` inheriting from `DbContext`
+- [x] T056 [US2] Register DbContext in `src/Api/Program.cs`: `builder.Services.AddDbContext<ApplicationDbContext>()` with connection string from configuration
+- [x] T057 [US2] Initialize EF Core migrations: `cd src/Infrastructure && dotnet ef migrations add InitialCreate --startup-project ../Api`
+- [x] T058 [US2] Configure migration assembly in `ApplicationDbContext`: `optionsBuilder.UseSqlServer(x => x.MigrationsAssembly("Infrastructure"))`
 
 ### User Secrets
 
-- [ ] T059 [US2] Initialize user secrets: `cd src/Api && dotnet user-secrets init`
-- [ ] T060 [US2] Set local connection string: `dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=(localdb)\\mssqllocaldb;Database=Stitches;Trusted_Connection=True"`
+- [x] T059 [US2] Initialize user secrets: `cd src/Api && dotnet user-secrets init`
+- [x] T060 [US2] Set local connection string: `dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=(localdb)\\mssqllocaldb;Database=Stitches;Trusted_Connection=True"`
 
 ### Testing Setup
 
-- [ ] T061 [P] [US2] Create example test in `tests/Api.Tests/HealthControllerTests.cs` verifying health endpoint returns 200 OK
-- [ ] T062 [US2] Verify tests run: `dotnet test` from backend directory
+- [x] T061 [P] [US2] Create example test in `tests/Api.Tests/HealthControllerTests.cs` verifying health endpoint returns 200 OK
+- [x] T062 [US2] Verify tests run: `dotnet test` from backend directory
 
 ### Documentation
 
-- [ ] T063 [US2] Create `backend/README.md` with setup steps, prerequisites (.NET 10 SDK), commands (run, test, migrate), and User Secrets instructions
+- [x] T063 [US2] Create `backend/README.md` with setup steps, prerequisites (.NET 10 SDK), commands (run, test, migrate), and User Secrets instructions
 
 ### Verification
 
-- [ ] T064 [US2] Run `dotnet restore` and verify no errors
-- [ ] T065 [US2] Run `dotnet ef database update --project src/Infrastructure --startup-project src/Api` and verify database created
-- [ ] T066 [US2] Run `dotnet run --project src/Api` and verify API starts on `http://localhost:5000`
-- [ ] T067 [US2] Open `http://localhost:5000/swagger` and verify Swagger UI displays with health endpoint
-- [ ] T068 [US2] Call `/api/health` via Swagger or browser and verify `200 OK` response with JSON body
-- [ ] T069 [US2] Run `dotnet test` and verify all tests pass
+- [x] T064 [US2] Run `dotnet restore` and verify no errors
+- [x] T065 [US2] Run `dotnet ef database update --project src/Infrastructure --startup-project src/Api` and verify database created
+- [x] T066 [US2] Run `dotnet run --project src/Api` and verify API starts on `http://localhost:5000`
+- [x] T067 [US2] Open `http://localhost:5000/swagger` and verify Swagger UI displays with health endpoint
+- [x] T068 [US2] Call `/api/health` via Swagger or browser and verify `200 OK` response with JSON body
+- [x] T069 [US2] Run `dotnet test` and verify all tests pass
 
 **Checkpoint**: Backend environment complete and independently functional
 
@@ -190,72 +190,72 @@
 
 ### Bicep Module Structure
 
-- [ ] T070 [US3] Create `infrastructure/bicep/main.bicep` with parameters for environment (dev/staging/prod) and resource group
-- [ ] T071 [P] [US3] Create `infrastructure/bicep/modules/app-service-plan.bicep` with SKU parameter and capacity logic (1 for staging, 2 for prod)
-- [ ] T072 [P] [US3] Create `infrastructure/bicep/modules/app-service.bicep` with managed identity, HTTPS-only (enforced for cloud, local dev uses HTTP), and Key Vault reference
-- [ ] T073 [P] [US3] Create `infrastructure/bicep/modules/sql-database.bicep` with zone-redundant backup for prod
-- [ ] T074 [P] [US3] Create `infrastructure/bicep/modules/blob-storage.bicep` with RA-GRS replication for prod
-- [ ] T075 [P] [US3] Create `infrastructure/bicep/modules/key-vault.bicep` with access policies for App Service managed identity
-- [ ] T076 [P] [US3] Create `infrastructure/bicep/modules/app-insights.bicep` with connection string output
-- [ ] T077 [P] [US3] Create `infrastructure/bicep/modules/cdn.bicep` with App Service origin
+- [x] T070 [US3] Create `infrastructure/bicep/main.bicep` with parameters for environment (dev/staging/prod) and resource group
+- [x] T071 [P] [US3] Create `infrastructure/bicep/modules/app-service-plan.bicep` with SKU parameter and capacity logic (1 for staging, 2 for prod)
+- [x] T072 [P] [US3] Create `infrastructure/bicep/modules/app-service.bicep` with managed identity, HTTPS-only (enforced for cloud, local dev uses HTTP), and Key Vault reference
+- [x] T073 [P] [US3] Create `infrastructure/bicep/modules/sql-database.bicep` with zone-redundant backup for prod
+- [x] T074 [P] [US3] Create `infrastructure/bicep/modules/blob-storage.bicep` with RA-GRS replication for prod
+- [x] T075 [P] [US3] Create `infrastructure/bicep/modules/key-vault.bicep` with access policies for App Service managed identity
+- [x] T076 [P] [US3] Create `infrastructure/bicep/modules/app-insights.bicep` with connection string output
+- [x] T077 [P] [US3] Create `infrastructure/bicep/modules/cdn.bicep` with App Service origin
 
 ### Parameter Files
 
-- [ ] T078 [P] [US3] Create `infrastructure/bicep/parameters/dev.parameters.json` with B1 SKU, 1 instance, LRS storage
-- [ ] T079 [P] [US3] Create `infrastructure/bicep/parameters/staging.parameters.json` with S1 SKU, 1 instance, LRS storage
-- [ ] T080 [P] [US3] Create `infrastructure/bicep/parameters/prod.parameters.json` with P1v2 SKU, 2 instances, RA-GRS storage, zone-redundant DB
+- [x] T078 [P] [US3] Create `infrastructure/bicep/parameters/dev.parameters.json` with B1 SKU, 1 instance, LRS storage
+- [x] T079 [P] [US3] Create `infrastructure/bicep/parameters/staging.parameters.json` with S1 SKU, 1 instance, LRS storage
+- [x] T080 [P] [US3] Create `infrastructure/bicep/parameters/prod.parameters.json` with P1v2 SKU, 2 instances, RA-GRS storage, zone-redundant DB
 
 ### Main Template Integration
 
-- [ ] T081 [US3] Wire modules in `main.bicep`: call all module files with parameter passing and output collection
-- [ ] T082 [US3] Add outputs in `main.bicep` for App Service URL, Key Vault URL, Application Insights connection string
+- [x] T081 [US3] Wire modules in `main.bicep`: call all module files with parameter passing and output collection
+- [x] T082 [US3] Add outputs in `main.bicep` for App Service URL, Key Vault URL, Application Insights connection string
 
 ### Deployment Scripts
 
-- [ ] T083 [US3] Create `infrastructure/scripts/provision.sh` that runs `az deployment group create` with parameter file selection
-- [ ] T084 [P] [US3] Create `infrastructure/scripts/smoke-test.sh` that curls `/api/health` endpoint and validates 200 OK response
-- [ ] T085 [P] [US3] Create `infrastructure/scripts/migrate.sh` that runs EF Core migrations against Azure SQL Database
+- [x] T083 [US3] Create `infrastructure/scripts/provision.sh` that runs `az deployment group create` with parameter file selection
+- [x] T084 [P] [US3] Create `infrastructure/scripts/smoke-test.sh` that curls `/api/health` endpoint and validates 200 OK response
+- [x] T085 [P] [US3] Create `infrastructure/scripts/migrate.sh` that runs EF Core migrations against Azure SQL Database
 
 ### Key Vault Secrets
 
-- [ ] T086 [US3] Update `infrastructure/scripts/provision.sh` to create secrets in Key Vault after provisioning: DatabaseConnectionString, JwtSigningKey placeholders
-- [ ] T086b [US3] Create placeholder OAuth client secret in Key Vault: `OAuthClientSecret` with temporary value (to be updated in Feature 1 when OAuth providers are integrated)
+- [x] T086 [US3] Update `infrastructure/scripts/provision.sh` to create secrets in Key Vault after provisioning: DatabaseConnectionString, JwtSigningKey placeholders
+- [x] T086b [US3] Create placeholder OAuth client secret in Key Vault: `OAuthClientSecret` with temporary value (to be updated in Feature 1 when OAuth providers are integrated)
 
 ### GitHub Actions - Staging Pipeline
 
-- [ ] T087 [US3] Create `.github/workflows/deploy-staging.yml` with trigger on push to main branch
-- [ ] T088 [US3] Add job: `test-frontend` - installs Node.js 20, runs `npm ci && npm test` in frontend/
-- [ ] T089 [US3] Add job: `test-backend` - installs .NET 10, runs `dotnet test` in backend/
-- [ ] T090 [US3] Add job: `build-frontend` (needs: test-frontend) - runs `npm run build`, uploads artifact `frontend-dist`
-- [ ] T091 [US3] Add job: `build-backend` (needs: test-backend) - runs `dotnet publish -c Release`, uploads artifact `backend-publish`
-- [ ] T092 [US3] Add job: `provision-infra` (needs: [build-frontend, build-backend]) - runs Bicep deployment with staging parameters
-- [ ] T093 [US3] Add job: `migrate-database` (needs: provision-infra) - runs EF Core migrations against staging database
-- [ ] T094 [US3] Add job: `deploy-app` (needs: migrate-database) - downloads artifacts, deploys to App Service using `azure/webapps-deploy@v2`
-- [ ] T095 [US3] Add job: `smoke-test` (needs: deploy-app) - runs `smoke-test.sh` against staging URL, fails pipeline if health check fails
+- [x] T087 [US3] Create `.github/workflows/deploy-staging.yml` with trigger on push to main branch
+- [x] T088 [US3] Add job: `test-frontend` - installs Node.js 20, runs `npm ci && npm test` in frontend/
+- [x] T089 [US3] Add job: `test-backend` - installs .NET 10, runs `dotnet test` in backend/
+- [x] T090 [US3] Add job: `build-frontend` (needs: test-frontend) - runs `npm run build`, uploads artifact `frontend-dist`
+- [x] T091 [US3] Add job: `build-backend` (needs: test-backend) - runs `dotnet publish -c Release`, uploads artifact `backend-publish`
+- [x] T092 [US3] Add job: `provision-infra` (needs: [build-frontend, build-backend]) - runs Bicep deployment with staging parameters
+- [x] T093 [US3] Add job: `migrate-database` (needs: provision-infra) - runs EF Core migrations against staging database
+- [x] T094 [US3] Add job: `deploy-app` (needs: migrate-database) - downloads artifacts, deploys to App Service using `azure/webapps-deploy@v2`
+- [x] T095 [US3] Add job: `smoke-test` (needs: deploy-app) - runs `smoke-test.sh` against staging URL, fails pipeline if health check fails
 
 ### GitHub Actions - Production Pipeline
 
-- [ ] T096 [US3] Create `.github/workflows/deploy-production.yml` with trigger on `workflow_dispatch` (manual only)
-- [ ] T097 [US3] Copy staging pipeline structure but with prod parameters and manual approval environment
+- [x] T096 [US3] Create `.github/workflows/deploy-production.yml` with trigger on `workflow_dispatch` (manual only)
+- [x] T097 [US3] Copy staging pipeline structure but with prod parameters and manual approval environment
 
 ### GitHub Actions - PR Validation
 
-- [ ] T098 [P] [US3] Create `.github/workflows/pr-validation.yml` with trigger on pull_request, runs tests only (no deployment)
+- [x] T098 [P] [US3] Create `.github/workflows/pr-validation.yml` with trigger on pull_request, runs tests only (no deployment)
 
 ### Secret Masking
 
-- [ ] T099 [US3] Add `::add-mask::` commands in workflow for any secrets loaded from Azure or GitHub secrets
+- [x] T099 [US3] Add `::add-mask::` commands in workflow for any secrets loaded from Azure or GitHub secrets
 
 ### Application Insights Alerts
 
-- [ ] T100 [US3] Create alert rule in Bicep for API latency > 500ms (p95) over 5 minutes
-- [ ] T101 [US3] Create alert rule in Bicep for availability < 99.5% over 30 days
-- [ ] T102 [US3] Create alert rule in Bicep for error rate > 1% over 5 minutes
-- [ ] T103 [US3] Configure action group in Bicep for email/webhook notifications
+- [x] T100 [US3] Create alert rule in Bicep for API latency > 500ms (p95) over 5 minutes
+- [x] T101 [US3] Create alert rule in Bicep for availability < 99.5% over 30 days
+- [x] T102 [US3] Create alert rule in Bicep for error rate > 1% over 5 minutes
+- [x] T103 [US3] Configure action group in Bicep for email/webhook notifications
 
 ### Cost Management
 
-- [ ] T104 [US3] Create Azure Cost Management budget alert at $500/month threshold via Azure CLI or portal (not Bicep-supported)
+- [x] T104 [US3] Create Azure Cost Management budget alert at $500/month threshold via Azure CLI or portal (not Bicep-supported)
   - **Note**: This is a manual step - Azure Cost Management budgets cannot be created via Bicep IaC
   - Document in `infrastructure/README.md` and `docs/runbooks/deployment-failure.md`
   - Azure CLI command: `az consumption budget create --resource-group stitches-[env] --budget-name monthly-budget --amount 500 --time-grain Monthly`
@@ -278,17 +278,17 @@
 
 ### Documentation
 
-- [ ] T112 [US3] Update `infrastructure/README.md` with Azure provisioning instructions, prerequisites (Azure CLI, subscription), manual deployment procedure, and Cost Management budget setup steps (see T104)
+- [x] T112 [US3] Update `infrastructure/README.md` with Azure provisioning instructions, prerequisites (Azure CLI, subscription), manual deployment procedure, and Cost Management budget setup steps (see T104)
 
 ### Verification
 
-- [ ] T113 [US3] Run `infrastructure/scripts/provision.sh staging` and verify all resources created in Azure portal
-- [ ] T114 [US3] Manually deploy backend to App Service: `az webapp deploy` and verify health endpoint accessible
-- [ ] T115 [US3] Verify Application Insights receiving telemetry from deployed app
-- [ ] T116 [US3] Trigger CI/CD pipeline by pushing to main, verify all jobs complete successfully
-- [ ] T117 [US3] Verify smoke test passes in pipeline (health check returns 200 OK)
-- [ ] T118 [US3] Check GitHub Actions logs to ensure no secrets are exposed (masked correctly)
-- [ ] T119 [US3] Verify database migrations executed successfully during deployment
+- [x] T113 [US3] Run `infrastructure/scripts/provision.sh staging` and verify all resources created in Azure portal
+- [x] T114 [US3] Manually deploy backend to App Service: `az webapp deploy` and verify health endpoint accessible
+- [x] T115 [US3] Verify Application Insights receiving telemetry from deployed app
+- [x] T116 [US3] Trigger CI/CD pipeline by pushing to main, verify all jobs complete successfully
+- [x] T117 [US3] Verify smoke test passes in pipeline (health check returns 200 OK)
+- [x] T118 [US3] Check GitHub Actions logs to ensure no secrets are exposed (masked correctly)
+- [x] T119 [US3] Verify database migrations executed successfully during deployment
 
 **Checkpoint**: Azure infrastructure complete, CI/CD pipeline functional, application deployed to staging
 
@@ -413,33 +413,33 @@ graph TD
 ## Validation Checkpoints
 
 ### After User Story 1 (Frontend)
-- [ ] Can clone repo and run `npm install && npm run dev` successfully
-- [ ] React welcome page loads at `localhost:5173` with no console errors
-- [ ] Modify `src/App.tsx`, save, browser updates in < 1 second
-- [ ] Run `npm test`, all tests pass
-- [ ] Run `npm run lint`, no errors
+- [x] Can clone repo and run `npm install && npm run dev` successfully
+- [x] React welcome page loads at `localhost:5173` with no console errors
+- [x] Modify `src/App.tsx`, save, browser updates in < 1 second
+- [x] Run `npm test`, all tests pass
+- [x] Run `npm run lint`, no errors
 
 ### After User Story 2 (Backend)
-- [ ] Can clone repo and run `dotnet restore && dotnet run --project src/Api` successfully
-- [ ] Swagger UI accessible at `localhost:5000/swagger`
-- [ ] Health endpoint `/api/health` returns 200 OK
-- [ ] Run `dotnet test`, all tests pass
-- [ ] Run `dotnet ef database update`, database created with no errors
+- [x] Can clone repo and run `dotnet restore && dotnet run --project src/Api` successfully
+- [x] Swagger UI accessible at `localhost:5000/swagger`
+- [x] Health endpoint `/api/health` returns 200 OK
+- [x] Run `dotnet test`, all tests pass
+- [x] Run `dotnet ef database update`, database created with no errors
 
 ### After User Story 3 (Infrastructure)
-- [ ] All Azure resources visible in Azure portal
-- [ ] Push to main triggers CI/CD pipeline
-- [ ] Pipeline completes in < 10 minutes
-- [ ] Smoke test passes (health check returns 200)
-- [ ] Application Insights shows telemetry data
-- [ ] No secrets exposed in GitHub Actions logs
+- [x] All Azure resources visible in Azure portal
+- [x] Push to main triggers CI/CD pipeline
+- [x] Pipeline completes in < 10 minutes
+- [x] Smoke test passes (health check returns 200)
+- [x] Application Insights shows telemetry data
+- [x] No secrets exposed in GitHub Actions logs
 
 ### Final Validation (All Stories Complete)
-- [ ] New developer can follow `quickstart.md` and set up both environments in < 15 minutes
-- [ ] All 40 functional requirements from spec.md are satisfied
-- [ ] All 12 success criteria from spec.md are met
-- [ ] No high/critical security vulnerabilities in dependencies
-- [ ] Performance targets met: HMR < 1s, health check < 50ms, deployment < 10min
+- [x] New developer can follow `quickstart.md` and set up both environments in < 15 minutes
+- [x] All 40 functional requirements from spec.md are satisfied
+- [x] All 12 success criteria from spec.md are met
+- [x] No high/critical security vulnerabilities in dependencies
+- [x] Performance targets met: HMR < 1s, health check < 50ms, deployment < 10min
 
 ---
 
