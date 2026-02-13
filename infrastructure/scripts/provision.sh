@@ -34,6 +34,20 @@ if [[ -z "${SQL_ADMIN_PASSWORD}" ]]; then
     exit 1
 fi
 
+# Validate password meets minimum Azure SQL requirements
+if [[ ${#SQL_ADMIN_PASSWORD} -lt 8 ]]; then
+    echo "❌ Password must be at least 8 characters long"
+    exit 1
+fi
+
+if ! [[ "${SQL_ADMIN_PASSWORD}" =~ [A-Z] ]] || \
+   ! [[ "${SQL_ADMIN_PASSWORD}" =~ [a-z] ]] || \
+   ! [[ "${SQL_ADMIN_PASSWORD}" =~ [0-9] ]]; then
+    echo "❌ Password must contain uppercase letters, lowercase letters, and numbers"
+    echo "   Current password does not meet complexity requirements"
+    exit 1
+fi
+
 # Check Azure CLI login
 if ! az account show &> /dev/null; then
     echo "❌ Not logged into Azure CLI. Run 'az login' first."
@@ -75,6 +89,8 @@ az keyvault secret set \
     --output none
 
 # Build and store database connection string
+# WARNING: This connection string contains sensitive credentials.
+# It should only be accessed by authorized services with appropriate Key Vault access policies.
 SQL_CONNECTION_STRING="Server=${SQL_SERVER_FQDN};Database=db-stitches-${ENVIRONMENT};User Id=sqladmin;Password=${SQL_ADMIN_PASSWORD};Encrypt=True;TrustServerCertificate=False;"
 az keyvault secret set \
     --vault-name "${KEY_VAULT_NAME}" \

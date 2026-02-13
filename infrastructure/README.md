@@ -57,18 +57,19 @@ az group create --name stitches-prod --location eastus
 The provisioning script requires a SQL Server administrator password for security.
 
 ```bash
-# Generate a secure password (or use your own)
-SQL_PASSWORD=$(openssl rand -base64 24 | tr -dc 'A-Za-z0-9!@#$%^&*' | head -c 20)
+# Generate a secure password (meets Azure SQL requirements)
+SQL_PASSWORD=$(openssl rand -base64 32 | tr -dc 'A-Za-z0-9!@#$%^&*()_+=' | head -c 20 && echo)
 
 # Deploy to staging
 ./scripts/provision.sh staging "${SQL_PASSWORD}"
 
-# Deploy to production
-./scripts/provision.sh prod "${SQL_PASSWORD}"
+# Deploy to production (use a different password!)
+SQL_PASSWORD_PROD=$(openssl rand -base64 32 | tr -dc 'A-Za-z0-9!@#$%^&*()_+=' | head -c 20 && echo)
+./scripts/provision.sh prod "${SQL_PASSWORD_PROD}"
 ```
 
 **Password Requirements**:
-- At least 8 characters
+- At least 8 characters (20 recommended)
 - Contains uppercase and lowercase letters
 - Contains numbers and special characters
 
@@ -166,8 +167,8 @@ The GitHub Actions workflows require the following secrets to be configured in y
 2. **`SQL_ADMIN_PASSWORD`** - SQL Server administrator password
 
    ```bash
-   # Generate a secure password
-   SQL_PASSWORD=$(openssl rand -base64 24 | tr -dc 'A-Za-z0-9!@#$%^&*' | head -c 20)
+   # Generate a secure password (meets Azure SQL requirements)
+   SQL_PASSWORD=$(openssl rand -base64 32 | tr -dc 'A-Za-z0-9!@#$%^&*()_+=' | head -c 20 && echo)
    
    # Add to GitHub Settings → Secrets → Actions → New repository secret
    # Name: SQL_ADMIN_PASSWORD
