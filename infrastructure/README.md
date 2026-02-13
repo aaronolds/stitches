@@ -174,7 +174,7 @@ The GitHub Actions workflows require the following secrets to be configured in y
    # Value: <your-secure-password>
    ```
 
-   ⚠️ **Important**: Use the same password for both staging and production environments, or create environment-specific secrets.
+   ⚠️ **Important**: Use different passwords for staging and production. Consider using [GitHub Environments](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) to store environment-specific secrets (e.g., `SQL_ADMIN_PASSWORD_STAGING` and `SQL_ADMIN_PASSWORD_PROD`).
 
 ### Configure Secrets in GitHub
 
