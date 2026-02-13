@@ -87,6 +87,7 @@ az consumption budget create \
 ```
 
 Or configure via Azure Portal:
+
 1. Navigate to Cost Management + Billing
 2. Select "Budgets" → "Add"
 3. Set amount to $500/month
@@ -97,6 +98,7 @@ Or configure via Azure Portal:
 All secrets are stored in Azure Key Vault. After provisioning:
 
 1. **Verify Key Vault Access**:
+
    ```bash
    az keyvault show --name kv-stitches-staging
    ```
