@@ -97,7 +97,7 @@ module.exports = {
     'prettier'  // Must be last to disable conflicting rules
   ],
   rules: {
-    'react/react-in-jsx-scope': 'off'  // Not needed in React 18+
+    'react/react-in-jsx-scope': 'off'  // Not needed in React 19+
   }
 }
 ```
@@ -579,7 +579,7 @@ fi
 All technology choices documented with rationale and alternatives. No "NEEDS CLARIFICATION" markers remain. Ready for Phase 1 design (data models and API contracts).
 
 **Key Decisions**:
-- Frontend: React 18 + Vite 5 + TypeScript + Vitest
+- Frontend: React 19 + Vite 5 + TypeScript + Vitest
 - Backend: ASP.NET Core 10 + xUnit + NSubstitute + EF Core
 - Infrastructure: Bicep + Managed Identity + Application Insights
 - CI/CD: GitHub Actions + Service Principal + EF Migrations

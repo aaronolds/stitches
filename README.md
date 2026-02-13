@@ -47,7 +47,7 @@ Stitches enables users to convert photos into cross-stitch patterns with an intu
 
 | Layer | Technology |
 |-------|------------|
-| Frontend | React 18+, TypeScript, Vite |
+| Frontend | React 19+, TypeScript, Vite |
 | Backend | ASP.NET Core 10+, C#, EF Core |
 | Database | Azure SQL Database |
 | Storage | Azure Blob Storage |

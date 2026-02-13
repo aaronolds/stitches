@@ -22,7 +22,7 @@ Establish foundational development and deployment infrastructure for the Stitche
 - Backend: C# (ASP.NET Core 10+, .NET 10 SDK)
 
 **Primary Dependencies**: 
-- Frontend: React 18+, Vite 5+, Vitest, ESLint, Prettier, React Router
+- Frontend: React 19+, Vite 5+, Vitest, ESLint, Prettier, React Router
 - Backend: ASP.NET Core Web API, Entity Framework Core, xUnit, NSubstitute, Swashbuckle (Swagger)
 - Infrastructure: Azure CLI, Bicep templates
 - CI/CD: GitHub Actions
@@ -82,7 +82,7 @@ Establish foundational development and deployment infrastructure for the Stitche
 
 | Requirement | Status | Implementation |
 |-------------|--------|----------------|
-| Frontend: React + Vite | ✅ PASS | React 18+ with Vite 5+ build tool, Context API or Redux for state |
+| Frontend: React + Vite | ✅ PASS | React 19+ with Vite 5+ build tool, Context API or Redux for state |
 | Backend: ASP.NET Core 10+ | ✅ PASS | ASP.NET Core 10+ Web API with C#, REST API architecture |
 | Database: Azure SQL Database | ✅ PASS | Provisioned with zone-redundant backup in prod, LocalDB for local dev |
 | Storage: Azure Blob Storage | ✅ PASS | Provisioned with RA-GRS geo-replication in prod |
