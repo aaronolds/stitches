@@ -35,16 +35,25 @@ if [[ -z "${SQL_ADMIN_PASSWORD}" ]]; then
 fi
 
 # Validate password meets minimum Azure SQL requirements
+# Azure SQL requires characters from at least 3 of these 4 categories:
+# uppercase, lowercase, numbers, special characters
 if [[ ${#SQL_ADMIN_PASSWORD} -lt 8 ]]; then
     echo "❌ Password must be at least 8 characters long"
     exit 1
 fi
 
-if ! [[ "${SQL_ADMIN_PASSWORD}" =~ [A-Z] ]] || \
-   ! [[ "${SQL_ADMIN_PASSWORD}" =~ [a-z] ]] || \
-   ! [[ "${SQL_ADMIN_PASSWORD}" =~ [0-9] ]]; then
-    echo "❌ Password must contain uppercase letters, lowercase letters, and numbers"
-    echo "   Current password does not meet complexity requirements"
+COMPLEXITY_COUNT=0
+[[ "${SQL_ADMIN_PASSWORD}" =~ [A-Z] ]] && COMPLEXITY_COUNT=$((COMPLEXITY_COUNT + 1))
+[[ "${SQL_ADMIN_PASSWORD}" =~ [a-z] ]] && COMPLEXITY_COUNT=$((COMPLEXITY_COUNT + 1))
+[[ "${SQL_ADMIN_PASSWORD}" =~ [0-9] ]] && COMPLEXITY_COUNT=$((COMPLEXITY_COUNT + 1))
+[[ "${SQL_ADMIN_PASSWORD}" =~ [^A-Za-z0-9] ]] && COMPLEXITY_COUNT=$((COMPLEXITY_COUNT + 1))
+
+if [[ ${COMPLEXITY_COUNT} -lt 3 ]]; then
+    echo "❌ Password must contain characters from at least 3 of these categories:"
+    echo "   - Uppercase letters (A-Z)"
+    echo "   - Lowercase letters (a-z)"
+    echo "   - Numbers (0-9)"
+    echo "   - Special characters (!@#\$%^&*()_+=)"
     exit 1
 fi
 

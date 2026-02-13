@@ -57,21 +57,22 @@ az group create --name stitches-prod --location eastus
 The provisioning script requires a SQL Server administrator password for security.
 
 ```bash
-# Generate a secure password (meets Azure SQL requirements)
-SQL_PASSWORD=$(openssl rand -base64 32 | tr -dc 'A-Za-z0-9!@#$%^&*()_+=' | head -c 20 && echo)
+# Generate a secure password that meets all Azure SQL requirements
+# This ensures at least one character from each required category
+SQL_PASSWORD="$(echo "$(openssl rand -base64 5 | tr -dc 'A-Z' | head -c 4)$(openssl rand -base64 5 | tr -dc 'a-z' | head -c 4)$(openssl rand -base64 5 | tr -dc '0-9' | head -c 4)$(openssl rand -base64 5 | tr -dc '!@#$%^&*()_+=' | head -c 4)$(openssl rand -base64 12 | tr -dc 'A-Za-z0-9!@#$%^&*()_+=' | head -c 4)" | fold -w1 | shuf | tr -d '\n')"
 
 # Deploy to staging
 ./scripts/provision.sh staging "${SQL_PASSWORD}"
 
 # Deploy to production (use a different password!)
-SQL_PASSWORD_PROD=$(openssl rand -base64 32 | tr -dc 'A-Za-z0-9!@#$%^&*()_+=' | head -c 20 && echo)
+SQL_PASSWORD_PROD="$(echo "$(openssl rand -base64 5 | tr -dc 'A-Z' | head -c 4)$(openssl rand -base64 5 | tr -dc 'a-z' | head -c 4)$(openssl rand -base64 5 | tr -dc '0-9' | head -c 4)$(openssl rand -base64 5 | tr -dc '!@#$%^&*()_+=' | head -c 4)$(openssl rand -base64 12 | tr -dc 'A-Za-z0-9!@#$%^&*()_+=' | head -c 4)" | fold -w1 | shuf | tr -d '\n')"
 ./scripts/provision.sh prod "${SQL_PASSWORD_PROD}"
 ```
 
 **Password Requirements**:
-- At least 8 characters (20 recommended)
-- Contains uppercase and lowercase letters
-- Contains numbers and special characters
+- At least 8 characters (20 characters generated)
+- Contains characters from at least 3 of 4 categories (uppercase, lowercase, numbers, special chars)
+- The generation command above ensures all 4 categories are included
 
 **Important**: Save the password securely! It will be automatically stored in Key Vault as `SqlAdminPassword` and used to build the database connection string.
 
@@ -167,8 +168,8 @@ The GitHub Actions workflows require the following secrets to be configured in y
 2. **`SQL_ADMIN_PASSWORD`** - SQL Server administrator password
 
    ```bash
-   # Generate a secure password (meets Azure SQL requirements)
-   SQL_PASSWORD=$(openssl rand -base64 32 | tr -dc 'A-Za-z0-9!@#$%^&*()_+=' | head -c 20 && echo)
+   # Generate a secure password that meets all Azure SQL requirements
+   SQL_PASSWORD="$(echo "$(openssl rand -base64 5 | tr -dc 'A-Z' | head -c 4)$(openssl rand -base64 5 | tr -dc 'a-z' | head -c 4)$(openssl rand -base64 5 | tr -dc '0-9' | head -c 4)$(openssl rand -base64 5 | tr -dc '!@#$%^&*()_+=' | head -c 4)$(openssl rand -base64 12 | tr -dc 'A-Za-z0-9!@#$%^&*()_+=' | head -c 4)" | fold -w1 | shuf | tr -d '\n')"
    
    # Add to GitHub Settings → Secrets → Actions → New repository secret
    # Name: SQL_ADMIN_PASSWORD
