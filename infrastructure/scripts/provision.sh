@@ -46,14 +46,15 @@ COMPLEXITY_COUNT=0
 [[ "${SQL_ADMIN_PASSWORD}" =~ [A-Z] ]] && COMPLEXITY_COUNT=$((COMPLEXITY_COUNT + 1))
 [[ "${SQL_ADMIN_PASSWORD}" =~ [a-z] ]] && COMPLEXITY_COUNT=$((COMPLEXITY_COUNT + 1))
 [[ "${SQL_ADMIN_PASSWORD}" =~ [0-9] ]] && COMPLEXITY_COUNT=$((COMPLEXITY_COUNT + 1))
-[[ "${SQL_ADMIN_PASSWORD}" =~ [^A-Za-z0-9] ]] && COMPLEXITY_COUNT=$((COMPLEXITY_COUNT + 1))
+# Check for allowed special characters using grep
+echo "${SQL_ADMIN_PASSWORD}" | grep -q '[@#%^&*_+-]' && COMPLEXITY_COUNT=$((COMPLEXITY_COUNT + 1))
 
 if [[ ${COMPLEXITY_COUNT} -lt 3 ]]; then
     echo "❌ Password must contain characters from at least 3 of these categories:"
     echo "   - Uppercase letters (A-Z)"
     echo "   - Lowercase letters (a-z)"
     echo "   - Numbers (0-9)"
-    echo "   - Special characters (!@#\$%^&*()_+=)"
+    echo "   - Special characters (@#%^&*_+-)"
     exit 1
 fi
 
