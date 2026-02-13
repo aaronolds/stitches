@@ -54,13 +54,29 @@ az group create --name stitches-prod --location eastus
 
 ### 3. Deploy Infrastructure
 
-```bash
-# Deploy to staging
-./scripts/provision.sh staging
+The provisioning script requires a SQL Server administrator password for security.
 
-# Deploy to production
-./scripts/provision.sh prod
+```bash
+# Generate a secure password that meets all Azure SQL requirements
+# Uses shell-safe special characters to avoid escaping issues
+SQL_PASSWORD="$(echo "$(openssl rand -base64 5 | tr -dc 'A-Z' | head -c 4)$(openssl rand -base64 5 | tr -dc 'a-z' | head -c 4)$(openssl rand -base64 5 | tr -dc '0-9' | head -c 4)$(openssl rand -base64 5 | tr -dc '@#%^&*_+\-' | head -c 4)$(openssl rand -base64 12 | tr -dc 'A-Za-z0-9@#%^&*_+\-' | head -c 4)" | fold -w1 | shuf | tr -d '\n')"
+
+# Deploy to staging
+./scripts/provision.sh staging "${SQL_PASSWORD}"
+
+# Deploy to production (use a different password!)
+SQL_PASSWORD_PROD="$(echo "$(openssl rand -base64 5 | tr -dc 'A-Z' | head -c 4)$(openssl rand -base64 5 | tr -dc 'a-z' | head -c 4)$(openssl rand -base64 5 | tr -dc '0-9' | head -c 4)$(openssl rand -base64 5 | tr -dc '@#%^&*_+\-' | head -c 4)$(openssl rand -base64 12 | tr -dc 'A-Za-z0-9@#%^&*_+\-' | head -c 4)" | fold -w1 | shuf | tr -d '\n')"
+./scripts/provision.sh prod "${SQL_PASSWORD_PROD}"
 ```
+
+**Password Requirements**:
+- At least 8 characters (12-20 characters generated)
+- Contains characters from at least 3 of 4 categories (uppercase, lowercase, numbers, special chars)
+- Uses shell-safe special characters: `@#%^&*_+-`
+
+**Important**: 
+- Always quote the password variable when passing it to scripts (as shown above)
+- Save the password securely! It will be automatically stored in Key Vault as `SqlAdminPassword`
 
 ### 4. Verify Deployment
 
@@ -95,23 +111,83 @@ Or configure via Azure Portal:
 
 ## Secrets Management
 
-All secrets are stored in Azure Key Vault. After provisioning:
+All secrets are stored in Azure Key Vault. The provisioning script automatically creates:
 
-1. **Verify Key Vault Access**:
+1. **Auto-Created by provision.sh**:
+   - `SqlAdminPassword`: SQL Server administrator password (from CLI parameter)
+   - `DatabaseConnectionString`: Built from SQL server FQDN and credentials
+
+2. **Manual Setup Required**:
 
    ```bash
-   az keyvault show --name kv-stitches-staging
+   # Generate and set JWT signing key
+   JWT_KEY=$(openssl rand -base64 64)
+   az keyvault secret set \
+     --vault-name kv-stitches-staging \
+     --name JwtSigningKey \
+     --value "${JWT_KEY}"
+
+   # Set OAuth client secret (will be needed for Feature 001)
+   az keyvault secret set \
+     --vault-name kv-stitches-staging \
+     --name OAuthClientSecret \
+     --value "<your-oauth-client-secret>"
    ```
 
-2. **Set Secrets** (done by CI/CD pipeline):
-   - `DatabaseConnectionString`: Azure SQL connection string
-   - `JwtSigningKey`: JWT token signing key
-   - `OAuthClientSecret`: OAuth provider client secret (placeholder)
+3. **Verify Secrets**:
 
-3. **Rotate Secrets**:
+   ```bash
+   az keyvault secret list --vault-name kv-stitches-staging --query "[].name" -o table
+   ```
+
+4. **Rotate Secrets**:
    - Update secret value in Key Vault
    - App Service automatically retrieves new value on next restart
    - See [Key Vault Access Runbook](../docs/runbooks/key-vault-access.md)
+
+## CI/CD Pipeline Configuration
+
+The GitHub Actions workflows require the following secrets to be configured in your repository:
+
+### Required GitHub Secrets
+
+1. **`AZURE_CREDENTIALS`** - Service Principal credentials for Azure deployment
+
+   Create a service principal and configure the secret:
+
+   ```bash
+   # Create service principal
+   az ad sp create-for-rbac \
+     --name "stitches-github-actions" \
+     --role contributor \
+     --scopes /subscriptions/<subscription-id>/resourceGroups/stitches-staging \
+     --sdk-auth
+
+   # Copy the JSON output to GitHub Settings → Secrets → Actions → New repository secret
+   # Name: AZURE_CREDENTIALS
+   ```
+
+2. **`SQL_ADMIN_PASSWORD`** - SQL Server administrator password
+
+   ```bash
+   # Generate a secure password that meets all Azure SQL requirements
+   SQL_PASSWORD="$(echo "$(openssl rand -base64 5 | tr -dc 'A-Z' | head -c 4)$(openssl rand -base64 5 | tr -dc 'a-z' | head -c 4)$(openssl rand -base64 5 | tr -dc '0-9' | head -c 4)$(openssl rand -base64 5 | tr -dc '@#%^&*_+\-' | head -c 4)$(openssl rand -base64 12 | tr -dc 'A-Za-z0-9@#%^&*_+\-' | head -c 4)" | fold -w1 | shuf | tr -d '\n')"
+   
+   # Add to GitHub Settings → Secrets → Actions → New repository secret
+   # Name: SQL_ADMIN_PASSWORD
+   # Value: <your-secure-password>
+   ```
+
+   ⚠️ **Important**: Use different passwords for staging and production. Consider using [GitHub Environments](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) to store environment-specific secrets (e.g., `SQL_ADMIN_PASSWORD_STAGING` and `SQL_ADMIN_PASSWORD_PROD`).
+
+### Configure Secrets in GitHub
+
+1. Navigate to your repository on GitHub
+2. Go to **Settings** → **Secrets and variables** → **Actions**
+3. Click **New repository secret**
+4. Add each required secret listed above
+
+For production deployments, consider using [GitHub Environments](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) to store environment-specific secrets.
 
 ## Disaster Recovery
 

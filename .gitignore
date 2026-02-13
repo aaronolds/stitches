@@ -45,6 +45,10 @@ Thumbs.db
 *.tfvars
 appsettings.*.user.json
 
+# Bicep compiled JSON (auto-generated)
+infrastructure/bicep/**/*.json
+!infrastructure/bicep/parameters/*.json
+
 # Test artifacts
 TestResults/
 coverage/

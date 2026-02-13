@@ -126,7 +126,7 @@ jobs:
           scope: resourcegroup
           resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
           template: infrastructure/bicep/main.bicep
-          parameters: infrastructure/bicep/parameters/staging.parameters.json
+          parameters: infrastructure/bicep/parameters/staging.parameters.json sqlAdministratorPassword=${{ secrets.SQL_ADMIN_PASSWORD }}
           failOnStdErr: false
 
   migrate-database:

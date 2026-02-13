@@ -9,7 +9,7 @@ Stitches is a cloud-first photo-to-cross-stitch pattern conversion web applicati
 ## Active Technologies
 
 ### Frontend (Feature 001-infrastructure-setup)
-- React 18+ with TypeScript
+- React 19+ with TypeScript
 - Vite 5+ (build tool with HMR)
 - Vitest (testing framework)
 - ESLint + Prettier (code quality)

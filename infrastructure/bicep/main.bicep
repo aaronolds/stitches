@@ -11,6 +11,10 @@ param location string = resourceGroup().location
 @description('Base name for all resources')
 param baseName string = 'stitches'
 
+@description('SQL Server administrator password')
+@secure()
+param sqlAdministratorPassword string
+
 // Resource naming
 var resourcePrefix = '${baseName}-${environment}'
 var appServicePlanName = 'plan-${resourcePrefix}'
@@ -68,6 +72,7 @@ module sqlDatabase 'modules/sql-database.bicep' = {
     databaseName: sqlDatabaseName
     location: location
     backupRedundancy: sqlDbBackupType
+    administratorLoginPassword: sqlAdministratorPassword
   }
 }
 
