@@ -1,0 +1,122 @@
+openapi: 3.0.3
+info:
+  title: Stitches API - Health Check
+  description: |
+    Initial API contract for infrastructure setup feature.
+    Provides a simple health check endpoint to verify deployment success.
+  version: 1.0.0
+  contact:
+    name: Stitches Team
+    email: support@stitches.example.com
+
+servers:
+  - url: http://localhost:5000
+    description: Local development server
+  - url: https://stitches-staging.azurewebsites.net
+    description: Staging environment
+  - url: https://stitches.azurewebsites.net
+    description: Production environment
+
+paths:
+  /api/health:
+    get:
+      summary: Health Check
+      description: |
+        Returns the health status of the API server.
+        Used for deployment verification, smoke tests, and load balancer health probes.
+        
+        **Performance Target**: < 50ms response time (local dev), < 200ms (cloud)
+        **Success Criteria**: Must return 200 OK when service is operational
+      operationId: getHealth
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Service is healthy and operational
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              examples:
+                success:
+                  summary: Successful health check
+                  value:
+                    status: "healthy"
+                    timestamp: "2026-01-31T20:30:00.000Z"
+                    version: "1.0.0"
+                    environment: "staging"
+        '503':
+          description: Service is unavailable (database connection failed, critical dependency down)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                database_down:
+                  summary: Database connection failure
+                  value:
+                    status: "unhealthy"
+                    timestamp: "2026-01-31T20:30:00.000Z"
+                    error: "Database connection failed"
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - timestamp
+      properties:
+        status:
+          type: string
+          enum: [healthy]
+          description: Health status of the service
+          example: "healthy"
+        timestamp:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp of the health check
+          example: "2026-01-31T20:30:00.000Z"
+        version:
+          type: string
+          description: API version (optional, useful for deployment verification)
+          example: "1.0.0"
+        environment:
+          type: string
+          description: Current environment name (optional, useful for debugging)
+          enum: [development, staging, production]
+          example: "staging"
+        uptime:
+          type: number
+          description: Server uptime in seconds (optional)
+          example: 3600
+        
+    ErrorResponse:
+      type: object
+      required:
+        - status
+        - timestamp
+        - error
+      properties:
+        status:
+          type: string
+          enum: [unhealthy]
+          description: Health status indicating failure
+          example: "unhealthy"
+        timestamp:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp of the failed health check
+          example: "2026-01-31T20:30:00.000Z"
+        error:
+          type: string
+          description: Human-readable error message
+          example: "Database connection failed"
+        details:
+          type: object
+          description: Additional error context (optional, omit in production for security)
+          additionalProperties: true
+
+tags:
+  - name: Health
+    description: Service health and status endpoints

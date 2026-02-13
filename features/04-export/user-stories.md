@@ -13,6 +13,7 @@ This feature enables users to export their completed cross-stitch patterns as hi
 A pattern is only useful if it can be exported. PDF generation is essential for printing charts for physical stitching, while PNG provides a raster format for social sharing, portfolio display, or digital archiving. This feature completes the user journey and is critical for go-live, but can be developed independently after Feature 2 is stable.
 
 **What this enables:**
+
 - Print-ready PDF with grid, legend, and stitch count
 - Digital sharing via high-resolution PNG
 - Configurable file naming and format options
@@ -27,17 +28,21 @@ A pattern is only useful if it can be exported. PDF generation is essential for 
 **As** a maker, **I want to** export my pattern as a high-quality PDF (for printing) or PNG (for sharing), **so that** I can produce my design or share it digitally.
 
 ### Priority
+
 **P2** - Critical for completion, but development can start after Feature 2 is stable
 
 ### User Personas
+
 - **Emma** (Amateur Hobbyist): Wants to print her pattern at home on a standard printer (A4 or Letter size)
 - **Maya** (Small Business Owner): Exports professional PDFs for her Etsy shop customers; quality and clarity are non-negotiable
 - **Alex** (Casual Experimenter): Wants to share a PNG on Instagram to show friends their cross-stitch design
 
 ### Why This Priority
+
 Export is the deliverable for the user's creative work. Without it, patterns are trapped in the app. However, export depends on completed designs (Feature 2), so it's not a blocker for earlier features. This can be developed in parallel with Feature 3 once Feature 2's data model is stable.
 
 ### Independent Test
+
 User completes a 50×50 pattern in the editor, clicks "Export", selects "PDF", configures options (paper size: A4, include legend: true, filename: "Holiday Pattern 2026"), downloads the PDF, opens it in a PDF viewer, sees the grid with symbols, legend with DMC colours and stitch counts, and prints successfully on a home printer.
 
 ---
@@ -49,6 +54,7 @@ User completes a 50×50 pattern in the editor, clicks "Export", selects "PDF", c
 **Given** a user has a design open  
 **When** they click the "Export" button  
 **Then** an export dialog appears with options:
+
 - Format: PDF or PNG
 - Paper size (PDF only): A4, Letter, 8×10"
 - Resolution (PNG only): 300 DPI (default), 150 DPI, 600 DPI
@@ -72,6 +78,7 @@ User completes a 50×50 pattern in the editor, clicks "Export", selects "PDF", c
 **Given** the PDF is being generated  
 **When** the backend processes the design  
 **Then** the PDF includes:
+
 - **Pattern grid:** Full cross-stitch grid with symbols in each stitch cell
 - **Colour legend:** Table with columns: Symbol | DMC Number | Colour Name | Stitch Count
 - **Metadata:** Design title, dimensions (width × height stitches), total stitch count
@@ -98,6 +105,7 @@ User completes a 50×50 pattern in the editor, clicks "Export", selects "PDF", c
 **Given** the PNG is being generated  
 **When** the backend processes the design  
 **Then** the PNG includes:
+
 - **Pattern grid:** Full cross-stitch grid with colour-filled cells (no symbols required; visual representation)
 - **Background:** White (default) or transparent (user option)
 - **Legend (optional):** Overlay or separate PNG with legend (user choice)
@@ -147,6 +155,7 @@ User completes a 50×50 pattern in the editor, clicks "Export", selects "PDF", c
 **Given** the user selects "Include legend: Yes"  
 **When** the PDF is generated  
 **Then** the legend appears on the first page or last page with:
+
 - Symbol column (visual representation of each symbol)
 - DMC Number column (e.g., "310")
 - Colour Name column (e.g., "Black")
@@ -166,6 +175,7 @@ User completes a 50×50 pattern in the editor, clicks "Export", selects "PDF", c
 **Given** a pattern exceeds the printable area for a single page (e.g., 300×300 stitches on A4)  
 **When** the PDF is generated  
 **Then** the pattern is split across multiple pages with:
+
 - Page numbers (e.g., "Page 1 of 4")
 - Grid alignment marks (e.g., "Continue to Page 2 at row 100")
 - Legend on the first page
@@ -189,22 +199,26 @@ User completes a 50×50 pattern in the editor, clicks "Export", selects "PDF", c
 ## Edge Cases & Considerations
 
 ### PDF Generation
+
 - **Large patterns (500×500):** May require multi-page tiling; test pagination logic carefully
 - **Special characters in filename:** Sanitize filenames to prevent filesystem errors (e.g., replace `/` with `-`)
 - **PDF size limits:** If pattern exceeds 100 pages, warn user or truncate (future: vector PDF for infinite zoom)
 - **Colour accuracy:** Ensure DMC colour hex codes render accurately in PDF (test on different PDF viewers)
 
 ### PNG Generation
+
 - **Memory usage:** Rendering 500×500 patterns at 600 DPI may consume significant RAM; test memory limits
 - **Transparent backgrounds:** PNG with transparency is useful for overlays; test alpha channel rendering
 - **Legend overlay positioning:** Ensure legend doesn't obscure the pattern; provide positioning options (bottom, right, separate file)
 
 ### Export Performance
+
 - **Concurrent exports:** Limit to 1 concurrent export per user to prevent resource exhaustion
 - **Export retries:** If job fails, allow user to retry up to 3 times before escalating to support
 - **Caching:** Consider caching exports for 24 hours (if design unchanged, reuse cached PDF/PNG to reduce compute)
 
 ### Printing Considerations
+
 - **Printer margins:** Ensure grid doesn't get clipped by printer margins (test on multiple printers)
 - **Black-and-white printing:** If user prints on B&W printer, symbols must be distinct (test symbol clarity)
 - **Large format printing:** For professional users (Maya), future: support poster sizes (18×24", 24×36")
@@ -213,7 +227,8 @@ User completes a 50×50 pattern in the editor, clicks "Export", selects "PDF", c
 
 ## Success Criteria
 
-### Feature 4 Complete When:
+### Feature 4 Complete When
+
 - ✅ User can export a design as PDF with grid, legend, and metadata
 - ✅ User can export a design as PNG at 300 DPI minimum
 - ✅ PDF is optimized for printing on A4, Letter, and 8×10" paper
@@ -225,6 +240,7 @@ User completes a 50×50 pattern in the editor, clicks "Export", selects "PDF", c
 - ✅ Integration tests pass for PDF and PNG generation with various pattern sizes
 
 ### Performance Targets
+
 - **Small patterns (≤ 100×100):** Export < 2 seconds (synchronous)
 - **Large patterns (100-200 stitches):** Export < 5 seconds (p95) per PRD
 - **Very large patterns (> 200×200):** Async job < 10 seconds (p95)
@@ -235,14 +251,17 @@ User completes a 50×50 pattern in the editor, clicks "Export", selects "PDF", c
 ## Technical References
 
 ### Constitution Alignment
+
 - **Principle V: Performance-First Design** - Export < 5 seconds (p95)
 
 ### SDD Alignment
+
 - **Section 8.5:** Export (PDF/PNG) - Small patterns synchronous, large patterns async
 - **Section 9.2:** Blob Storage Layout - Optional export caching: `{userId}/{designId}/exports/{timestamp}.{pdf|png}`
 - **Section 14.4:** MVP Decision - Server-side generation for consistent fidelity
 
 ### PRD Alignment
+
 - **Story #6:** Export to PDF & PNG (acceptance criteria preserved above)
 - **Success Criteria:** Export < 5 seconds (p95), print-optimized formats
 
@@ -251,12 +270,15 @@ User completes a 50×50 pattern in the editor, clicks "Export", selects "PDF", c
 ## Dependencies & Blockers
 
 **Depends On:**
+
 - Feature 2: Core Editor (requires completed designs with `stitchData`, `palette`, `symbolMap`)
 
 **Can Develop in Parallel With:**
+
 - Feature 3: Content Generation (photo import and export are independent workflows)
 
 **External Dependencies:**
+
 - PDF generation library (backend): Per SDD Section 15, specific library TBD; candidates: PdfSharp (.NET), ReportLab (Python), PDFKit (Node.js)
 - PNG generation library (backend): Per SDD Section 15, specific library TBD; candidates: ImageSharp (.NET), Pillow (Python), Sharp (Node.js)
 - Azure Blob Storage (optional: for export caching)
@@ -266,11 +288,13 @@ User completes a 50×50 pattern in the editor, clicks "Export", selects "PDF", c
 ## Follow-up Work (Post-Feature 4)
 
 After Feature 4 completes:
+
 - **Full workflow operational:** Users can create → edit → export → stitch
 - **MVP is complete:** All 7 PRD user stories (+ 3 infrastructure stories) delivered
 - **Beta testing:** Validate export quality with real users printing on various printers
 
 **Future Enhancements (v1.1+):**
+
 - Export to other formats: SVG (vector), XSD (cross-stitch data format)
 - Export customization: Colour vs. black-and-white, symbol size, grid thickness
 - Batch export: Export multiple designs in one ZIP file
@@ -278,6 +302,7 @@ After Feature 4 completes:
 - Export to cross-stitch machine formats (e.g., Brother, Janome)
 
 **SDD Section 15 Open Items (Resolved Post-Feature 4):**
+
 - Select specific PDF generation library after licensing review and performance testing
 - Select specific PNG generation library after canvas rendering benchmarks
 
