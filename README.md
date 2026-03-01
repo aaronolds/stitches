@@ -95,6 +95,38 @@ dotnet run --project src/Api
 
 Open [http://localhost:5000/swagger](http://localhost:5000/swagger) to view API documentation.
 
+### Build Script
+
+A unified build script is available at the repo root:
+
+```bash
+./build.sh              # Build frontend and backend (default)
+./build.sh frontend     # Build frontend only
+./build.sh backend      # Build backend only
+./build.sh --help       # Show usage information
+```
+
+The script installs dependencies, runs production builds, reports elapsed time for each step, and exits with a non-zero code on failure.
+
+### Dev Script
+
+A dev script starts development servers with HMR and live reload:
+
+```bash
+./dev.sh                # Start both frontend and backend concurrently (default)
+./dev.sh frontend       # Start frontend only (Vite HMR on localhost:5173)
+./dev.sh backend        # Start backend only (ASP.NET Core on localhost:5000)
+./dev.sh --help         # Show usage information
+```
+
+When running both servers, output is prefixed with `[frontend]` / `[backend]` labels. Press **Ctrl+C** to stop all servers cleanly.
+
+| Server | URL |
+|--------|-----|
+| Frontend | [http://localhost:5173](http://localhost:5173) |
+| Backend API | [http://localhost:5000](http://localhost:5000) |
+| Swagger UI | [http://localhost:5000/swagger](http://localhost:5000/swagger) |
+
 ## Project Structure
 
 ```text

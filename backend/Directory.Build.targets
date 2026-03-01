@@ -1,0 +1,8 @@
+<Project>
+
+  <!-- Test project specific properties (evaluated after Microsoft.NET.Test.Sdk sets IsTestProject) -->
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+    <NoWarn>$(NoWarn);CA1707;IDE0058</NoWarn>
+  </PropertyGroup>
+
+</Project>
