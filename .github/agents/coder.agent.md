@@ -1,7 +1,7 @@
 ---
 name: Coder
 description: Writes code following mandatory coding principles.
-model: Claude Opus 4.6 (copilot)
+model: [Claude Opus 4.6 (copilot), GPT-5.3-Codex]
 tools: ['vscode', 'execute', 'read', 'agent', 'context7/*', 'github/*', 'edit', 'search', 'web', 'vscode/memory', 'todo']
 ---
 
