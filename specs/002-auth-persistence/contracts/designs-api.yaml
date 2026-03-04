@@ -1,0 +1,618 @@
+openapi: 3.0.3
+info:
+  title: Stitches API - Authentication & Designs
+  description: |
+    API contracts for Feature 002: Authentication & Persistence Foundation.
+    Covers user authentication (OAuth via Entra External ID), design CRUD with
+    ownership authorization, search/sort/filter, soft-delete with recovery,
+    autosave, and rate limiting.
+  version: 2.0.0
+  contact:
+    name: Stitches Team
+
+servers:
+  - url: http://localhost:5000
+    description: Local development server
+  - url: https://stitches-staging.azurewebsites.net
+    description: Staging environment
+  - url: https://stitches.azurewebsites.net
+    description: Production environment
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Auth
+    description: Authentication and user profile
+  - name: Designs
+    description: Design CRUD, search, sort, filter
+  - name: Deleted Designs
+    description: Recently deleted designs (soft-delete recovery)
+
+paths:
+  /api/me:
+    get:
+      summary: Get current user profile
+      description: |
+        Returns the authenticated user's profile information.
+        User record is created automatically on first OAuth sign-in.
+      operationId: getCurrentUser
+      tags: [Auth]
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+              examples:
+                google_user:
+                  summary: Google OAuth user
+                  value:
+                    id: "019503a1-b2c3-7d4e-8f5a-6b7c8d9e0f12"
+                    email: "jane.doe@gmail.com"
+                    displayName: "Jane Doe"
+                    oAuthProvider: "google"
+                    createdAt: "2026-03-15T14:30:00+00:00"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/designs:
+    get:
+      summary: List user's designs
+      description: |
+        Returns a paginated list of the authenticated user's active (non-deleted) designs.
+        Supports search by title, sorting, and filtering by colour count.
+        **Rate limit**: 60 reads/min per user (read-limit policy).
+      operationId: listDesigns
+      tags: [Designs]
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: Page number (1-indexed)
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+          description: Number of designs per page
+        - name: search
+          in: query
+          schema:
+            type: string
+            maxLength: 255
+          description: Search designs by title (case-insensitive contains)
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+            enum: [name, createdAt, updatedAt]
+            default: updatedAt
+          description: Sort field
+        - name: sortOrder
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+          description: Sort direction
+        - name: colourCount
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+          description: Filter by exact number of colours in palette
+      responses:
+        '200':
+          description: Paginated list of designs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DesignListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+
+    post:
+      summary: Create a new design
+      description: |
+        Creates a new design owned by the authenticated user.
+        Title defaults to "Untitled Design" if not provided.
+        **Rate limit**: 30 writes/min per user (write-limit policy).
+      operationId: createDesign
+      tags: [Designs]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDesignRequest'
+            examples:
+              blank_design:
+                summary: Create a blank design
+                value:
+                  title: "My First Cross-Stitch"
+                  width: 100
+                  height: 80
+                  stitchData: "{\"grid\":[]}"
+                  palette: "[]"
+                  symbolMap: "{}"
+      responses:
+        '201':
+          description: Design created
+          headers:
+            Location:
+              schema:
+                type: string
+              description: URL of the created design
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DesignResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+
+  /api/designs/{designId}:
+    parameters:
+      - name: designId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Design unique identifier
+
+    get:
+      summary: Get a design by ID
+      description: |
+        Returns full design data including stitch data, palette, and symbol map.
+        Only the design owner can access the design.
+        **Rate limit**: 60 reads/min per user.
+      operationId: getDesign
+      tags: [Designs]
+      responses:
+        '200':
+          description: Full design data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DesignResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+
+    patch:
+      summary: Update a design
+      description: |
+        Partially updates a design owned by the authenticated user.
+        Used by both manual save and autosave. Only provided fields are updated.
+        The `updatedAt` timestamp is refreshed automatically.
+        **Rate limit**: 30 writes/min per user.
+        **Performance target**: < 2s at p95 (autosave SLO).
+      operationId: updateDesign
+      tags: [Designs]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDesignRequest'
+            examples:
+              autosave:
+                summary: Autosave stitch data
+                value:
+                  stitchData: "{\"grid\":[[\"#FF0000\",\"#00FF00\"]]}"
+                  palette: "[{\"id\":1,\"hex\":\"#FF0000\",\"name\":\"Red\"}]"
+                  symbolMap: "{\"1\":\"X\"}"
+              rename:
+                summary: Rename design
+                value:
+                  title: "Updated Title"
+      responses:
+        '200':
+          description: Design updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DesignResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+
+    delete:
+      summary: Soft-delete a design
+      description: |
+        Soft-deletes a design by setting IsDeleted=true and recording DeletedAt.
+        Design is recoverable for 30 days via the Recently Deleted endpoint.
+        After 30 days, a background job permanently purges the design.
+        **Rate limit**: 30 writes/min per user.
+      operationId: deleteDesign
+      tags: [Designs]
+      responses:
+        '204':
+          description: Design soft-deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+
+  /api/designs/deleted:
+    get:
+      summary: List recently deleted designs
+      description: |
+        Returns the authenticated user's soft-deleted designs that are within
+        the 30-day recovery window. Sorted by deletion date (newest first).
+        **Rate limit**: 60 reads/min per user.
+      operationId: listDeletedDesigns
+      tags: [Deleted Designs]
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Paginated list of deleted designs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletedDesignListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+
+  /api/designs/{designId}/restore:
+    parameters:
+      - name: designId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    post:
+      summary: Restore a soft-deleted design
+      description: |
+        Restores a soft-deleted design by clearing IsDeleted and DeletedAt.
+        Only works within 30 days of deletion.
+        **Rate limit**: 30 writes/min per user.
+      operationId: restoreDesign
+      tags: [Deleted Designs]
+      responses:
+        '200':
+          description: Design restored
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DesignResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          description: Design not found or already purged
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Microsoft Entra External ID JWT obtained via MSAL.js OAuth flow
+
+  schemas:
+    UserProfile:
+      type: object
+      required: [id, displayName, oAuthProvider, createdAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+          nullable: true
+        displayName:
+          type: string
+          maxLength: 200
+        oAuthProvider:
+          type: string
+          enum: [google, facebook, apple, microsoft]
+        createdAt:
+          type: string
+          format: date-time
+
+    CreateDesignRequest:
+      type: object
+      required: [width, height, stitchData, palette, symbolMap]
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+          default: "Untitled Design"
+        width:
+          type: integer
+          minimum: 1
+          maximum: 1000
+        height:
+          type: integer
+          minimum: 1
+          maximum: 1000
+        stitchData:
+          type: string
+          description: JSON-encoded grid data
+        palette:
+          type: string
+          description: JSON-encoded colour palette
+        symbolMap:
+          type: string
+          description: JSON-encoded symbol-to-colour mapping
+        uploadedImageUrl:
+          type: string
+          format: uri
+          maxLength: 2048
+          nullable: true
+
+    UpdateDesignRequest:
+      type: object
+      description: All fields are optional. Only provided fields are updated.
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+        width:
+          type: integer
+          minimum: 1
+          maximum: 1000
+        height:
+          type: integer
+          minimum: 1
+          maximum: 1000
+        stitchData:
+          type: string
+        palette:
+          type: string
+        symbolMap:
+          type: string
+        uploadedImageUrl:
+          type: string
+          format: uri
+          maxLength: 2048
+          nullable: true
+
+    DesignResponse:
+      type: object
+      required: [id, userId, title, width, height, stitchData, palette, symbolMap, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        title:
+          type: string
+        width:
+          type: integer
+        height:
+          type: integer
+        stitchData:
+          type: string
+        palette:
+          type: string
+        symbolMap:
+          type: string
+        uploadedImageUrl:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    DesignSummary:
+      type: object
+      description: Lightweight design representation for list views (excludes large stitch data)
+      required: [id, title, width, height, colourCount, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        width:
+          type: integer
+        height:
+          type: integer
+        colourCount:
+          type: integer
+          description: Number of colours in the palette
+        thumbnailUrl:
+          type: string
+          format: uri
+          nullable: true
+          description: URL to design thumbnail preview
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    DesignListResponse:
+      type: object
+      required: [items, page, pageSize, totalCount, totalPages]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/DesignSummary'
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalCount:
+          type: integer
+        totalPages:
+          type: integer
+
+    DeletedDesignSummary:
+      type: object
+      required: [id, title, width, height, deletedAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        width:
+          type: integer
+        height:
+          type: integer
+        deletedAt:
+          type: string
+          format: date-time
+        daysUntilPurge:
+          type: integer
+          description: Days remaining before permanent deletion
+
+    DeletedDesignListResponse:
+      type: object
+      required: [items, page, pageSize, totalCount, totalPages]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeletedDesignSummary'
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalCount:
+          type: integer
+        totalPages:
+          type: integer
+
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+
+    ValidationErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+      example:
+        error: "Validation failed"
+        details:
+          - field: "title"
+            message: "Title must be between 1 and 255 characters"
+          - field: "width"
+            message: "Width must be between 1 and 1000"
+
+  responses:
+    Unauthorized:
+      description: Missing or invalid JWT token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: "Authentication required"
+
+    Forbidden:
+      description: User does not own the requested design
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: "You do not have permission to access this design"
+
+    NotFound:
+      description: Design not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: "Design not found"
+
+    ValidationError:
+      description: Request body failed validation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorResponse'
+
+    RateLimitExceeded:
+      description: Per-user rate limit exceeded
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Seconds until the rate limit resets
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: "Rate limit exceeded. Try again later."
